@@ -46,11 +46,12 @@ export function useCustomPointer(): void {
 
       // Toggle small pointer visibility based on the cursor style
       if (smallPointerElement.current) {
-        smallPointerElement.current.style.opacity =
-          hoveredElementCursorStyle === 'pointer' ||
-          hoveredElementCursorStyle === ''
-            ? '0'
-            : '1';
+        smallPointerElement.current.style.opacity = ![
+          'auto',
+          'default',
+        ].includes(hoveredElementCursorStyle)
+          ? '0'
+          : '1';
       }
     };
 

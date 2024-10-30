@@ -11,12 +11,12 @@
 import type { IpcMainEvent } from 'electron';
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import log from 'electron-log';
-import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
 
 import { resolveHtmlPath } from '../util';
 import MenuBuilder from './menu';
+import store from './store';
 
 class AppUpdater {
   constructor() {
@@ -91,8 +91,6 @@ export const createWindow = async () => {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
-
-  const store = new Store();
 
   ipcMain.on('electron-store-get', async (event: IpcMainEvent, key: string) => {
     // eslint-disable-next-line no-param-reassign

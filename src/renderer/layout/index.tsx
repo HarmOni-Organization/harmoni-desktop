@@ -34,10 +34,11 @@ function MainLayout({
         <Cover />
         <section className="section" style={{ height: '100vh' }}>
           <NavigationMenu />
-
-          <div className="content main">
+          <div className="content">
             <Breadcrumb />
-            {children} {/* Dynamic children elements */}
+            <div className="main">
+              {children} {/* Dynamic children elements */}
+            </div>
           </div>
         </section>
       </main>

@@ -7,7 +7,7 @@ import { appThemeRemoveAll, limitNumberWithinRange } from '../utils/helper';
  * touch or mouse devices. It handles toggling the slider visibility, updating
  * theme based on user interaction, and ensuring appropriate event listeners.
  *
- * @returns {Object} - `themeSliderRef`: Ref for the theme slider element,
+ * @returns {Object}  - `themeSliderRef`: Ref for the theme slider element,
  *                    - `isSliderVisible`: Boolean indicating if the slider is visible,
  *                    - `isTouchDevice`: Boolean indicating if the current device is touch-enabled.
  */

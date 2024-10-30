@@ -12,6 +12,27 @@ const useAppThemeSpectrum = () => {
   const removeAllThemes = useAppThemeRemoveAll();
 
   /**
+   * Toggles between 'theme--00' and 'theme--16'.
+   * It removes all current theme classes and adds the appropriate one based on the current state.
+   */
+  const toggleTheme = useCallback(() => {
+    const { body } = document;
+    const nextThemeNumber = body.classList.contains('theme--00') ? 16 : 0;
+
+    removeAllThemes();
+
+    window.electron.store.set('userPreferences.theme', nextThemeNumber);
+    body.classList.add(`theme--${nextThemeNumber.toString().padStart(2, '0')}`);
+
+    const sliderElement =
+      document.querySelector<HTMLInputElement>('.app-aside .slider');
+
+    if (sliderElement) {
+      sliderElement.value = nextThemeNumber.toString();
+    }
+  }, [removeAllThemes]);
+
+  /**
    * Cycles through themes by adding or removing a theme class to the body.
    *
    * @param {boolean} [isReverse=false] - If true, cycles forward through themes. Otherwise, cycles backward.
@@ -39,6 +60,7 @@ const useAppThemeSpectrum = () => {
 
         // Remove all current theme classes and apply the new theme
         removeAllThemes();
+        window.electron.store.set('userPreferences.theme', nextThemeNumber);
         body.classList.add(
           `theme--${nextThemeNumber.toString().padStart(2, '0')}`,
         );
@@ -54,7 +76,7 @@ const useAppThemeSpectrum = () => {
     [removeAllThemes],
   );
 
-  return cycleThemes;
+  return { cycleThemes, toggleTheme };
 };
 
 export default useAppThemeSpectrum;

@@ -85,16 +85,20 @@
     }
   },
   "dependencies": {
+    "@chatui/core": "^2.4.2",
     "@electron/notarize": "^2.3.2",
     "classnames": "^2.5.1",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.8",
     "electron-store": "8",
     "electron-updater": "^6.1.4",
+    "moment": "^2.30.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0",
-    "styled-components": "^6.1.13"
+    "styled-components": "^6.1.13",
+    "mobx-react-lite": "^4.0.7",
+    "mobx": "^6.13.5"
   },
   "devDependencies": {
     "@electron/rebuild": "^3.3.0",

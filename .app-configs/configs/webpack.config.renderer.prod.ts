@@ -1,5 +1,7 @@
 /**
- * Build config for electron renderer process
+ * Production Build Configuration for Electron Renderer Process
+ * This configuration sets up Webpack for the Electron renderer process,
+ * optimizing performance and minimizing output for production builds.
  */
 
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
@@ -17,9 +19,12 @@ import baseConfig from './webpack.config.base';
 import webpackPaths from './webpack.paths';
 
 checkNodeEnv('production');
+
+// Remove existing source maps for a clean build
 deleteSourceMaps();
 
-const configuration: webpack.Configuration = {
+// Webpack Configuration for the renderer process
+const rendererConfig: webpack.Configuration = {
   devtool: 'source-map',
 
   mode: 'production',
@@ -46,25 +51,33 @@ const configuration: webpack.Configuration = {
           {
             loader: 'css-loader',
             options: {
-              modules: true, // Enables CSS Modules
+              modules: true, // Enable CSS Modules for local scoping
               sourceMap: true,
               importLoaders: 1,
             },
           },
-          'sass-loader', // Allows SASS files
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
         ],
-        include: /\.module\.s?(c|a)ss$/, // Only include CSS/SASS modules
+        include: /\.module\.s?(c|a)ss$/, // Only include SCSS/CSS modules
       },
       {
-        test: /\.s?(a|c)ss$/,
+        test: /\.s?(c|a)ss$/, // Match both .css and .scss files
         use: [
           MiniCssExtractPlugin.loader,
-          'style-loader',
           'css-loader',
-          'sass-loader',
-
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
         ],
-        exclude: /\.module\.s?(c|a)ss$/, // Exclude CSS/SASS modules
+        exclude: /\.module\.s?(c|a)ss$/, // Exclude CSS/SCSS modules from global styles
       },
       // Fonts
       {
@@ -76,7 +89,7 @@ const configuration: webpack.Configuration = {
         test: /\.(png|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
       },
-      // SVG
+      // SVGs
       {
         test: /\.svg$/,
         use: [
@@ -100,18 +113,16 @@ const configuration: webpack.Configuration = {
 
   optimization: {
     minimize: true,
-    minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
+    minimizer: [
+      new TerserPlugin(), // Minify JavaScript files
+      new CssMinimizerPlugin(), // Minify CSS files
+    ],
   },
 
   plugins: [
     /**
-     * Create global constants which can be configured at compile time.
-     *
-     * Useful for allowing different behaviour between development builds and
-     * release builds
-     *
-     * NODE_ENV should be production so that modules do not perform certain
-     * development checks
+     * Define environment variables and global constants.
+     * Useful for configuring behavior between development and production builds.
      */
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
@@ -119,7 +130,7 @@ const configuration: webpack.Configuration = {
     }),
 
     new MiniCssExtractPlugin({
-      filename: 'style.css',
+      filename: 'style.css', // Extract CSS into a separate file
     }),
 
     new BundleAnalyzerPlugin({
@@ -145,4 +156,4 @@ const configuration: webpack.Configuration = {
   ],
 };
 
-export default merge(baseConfig, configuration);
+export default merge(baseConfig, rendererConfig);

@@ -1,8 +1,11 @@
 import './style.css';
 
 import clsx from 'classnames';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 
+import store from '../../../../core/stores/RootStore';
+import useAppTheme from '../../../../hooks/useAppTheme';
 import { useThemeSlider } from '../../../../hooks/useThemeSlider';
 import { appThemeRemoveAll } from '../../../../utils/helper';
 import { appAsideClasses } from '../../appAsideClasses';
@@ -22,8 +25,10 @@ const THEME_COUNT = 17; // Total number of theme options in the slider
  * @returns {JSX.Element} The rendered theme slider component.
  */
 function ThemeSlider(): JSX.Element {
-  const [themeValue, setThemeValue] = React.useState(0); // Current theme value
-  const { themeSliderRef, isSliderVisible, isTouchDevice } = useThemeSlider(); // Custom hook for slider functionality
+  useAppTheme();
+
+  const { theme, setTheme } = store.preferencesStore;
+  const { themeSliderRef, isSliderVisible, isTouchDevice } = useThemeSlider();
 
   /**
    * Handles slider value change and applies the selected theme.
@@ -33,9 +38,9 @@ function ThemeSlider(): JSX.Element {
   const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const sliderValue = +event.target.value; // Convert input value to number
     const formattedValue =
-      sliderValue < 10 ? `0${sliderValue}` : `${sliderValue}`; // Ensure theme value is always two digits
+      sliderValue < 10 ? `0${sliderValue}` : `${sliderValue}`;
 
-    setThemeValue(sliderValue); // Update theme value state
+    setTheme(sliderValue);
 
     // Remove all existing theme classes from the body
     appThemeRemoveAll();
@@ -48,8 +53,8 @@ function ThemeSlider(): JSX.Element {
     <div
       ref={themeSliderRef}
       className={clsx(appAsideClasses.option, appAsideClasses.themeRoot, {
-        'theme-slider--is--visible': isSliderVisible, // Conditional class for visibility
-        touchevents: isTouchDevice, // Conditional class based on touch support
+        'theme-slider--is--visible': isSliderVisible,
+        touchevents: isTouchDevice,
         'no-touchevents': !isTouchDevice,
       })}
     >
@@ -72,9 +77,9 @@ function ThemeSlider(): JSX.Element {
           min="0"
           max={THEME_COUNT - 1}
           step="1"
-          value={themeValue}
+          value={theme}
           onChange={handleSliderChange}
-          aria-label="Select Theme" // Accessibility label
+          aria-label="Select Theme"
         />
       </div>
 
@@ -83,4 +88,4 @@ function ThemeSlider(): JSX.Element {
   );
 }
 
-export default ThemeSlider;
+export default observer(ThemeSlider);
