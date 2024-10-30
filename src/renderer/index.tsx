@@ -1,4 +1,4 @@
-import './styles/global.css';
+import './styles/global.scss';
 import './styles/theme/media-queries.css';
 
 import { createRoot } from 'react-dom/client';
