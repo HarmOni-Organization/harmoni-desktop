@@ -140,7 +140,6 @@ backdrop-filter: blur(12px); */
       transform 0.2s ease-out;
   }
 
-  // To Do
   body.mobile-nav--is--transitioning .app-nav .item:nth-child(1) {
     transition-delay: 0.14s;
   }
