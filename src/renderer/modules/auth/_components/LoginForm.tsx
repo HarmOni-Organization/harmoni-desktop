@@ -38,10 +38,13 @@ function LoginForm() {
     try {
       const { emailOrUsername, password } = formData;
       await authStore.login({ emailOrUsername, password });
-
       // Reset form if login succeeds
       if (!authStore.authState.authError) {
-        formRef.current?.resetForm?.();
+        setTimeout(() => {
+          formRef.current?.resetForm?.();
+        }, 500);
+      } else {
+        formRef.current?.updateFieldValue?.('password', '');
       }
     } catch (error) {
       console.error('Login Error:', error);
