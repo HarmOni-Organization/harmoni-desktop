@@ -2,6 +2,7 @@ import type { InternalAxiosRequestConfig } from 'axios';
 import axios from 'axios';
 
 import { showToast } from '../components/Toaster';
+import appConfig from '../config/appConfig';
 
 /**
  * Handles API errors by checking if the error is an AxiosError and throws
@@ -40,7 +41,7 @@ export const handleApiError = (error: unknown): never => {
  * Create an Axios instance for HarmOni API with pre-configured settings.
  */
 const harmOniApiClient = axios.create({
-  baseURL: 'http://localhost:5050/',
+  baseURL: appConfig.baseURL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -90,7 +91,7 @@ harmOniApiClient.interceptors.response.use(
           const token = window.electron.store.get('auth.currentUser.token');
           if (token) {
             const refreshResponse = await axios.get(
-              'http://localhost:5050/auth/refresh-token',
+              `${appConfig.baseURL}/auth/refresh-token`,
               {
                 headers: { Authorization: `Bearer ${token}` },
               },
