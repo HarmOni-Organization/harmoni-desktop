@@ -2,6 +2,11 @@ body {
   color: var(--color--foreground--100);
   background-color: var(--color--background--100);
   --color--mixed--red: color-mix(in lab, currentColor, red 80%);
+  --color--mixed--green: color-mix(in lab, currentColor, green 80%);
+  --color--mixed--info: color-mix(in lab, currentColor, #3498db 80%);
+  --color--mixed--success: color-mix(in lab, currentColor, #07bc0c 80%);
+  --color--mixed--warning: color-mix(in lab, currentColor, #f1c40f 80%);
+  --color--mixed--error: color-mix(in lab, currentColor, #e74c3c 80%);
 }
 
 body.theme--16 {
@@ -135,7 +140,7 @@ body.theme--08 {
   --color--foreground--10: rgb(243 230 207 / 0.17);
   --color--foreground--5: rgb(243 230 207 / 0.12);
   --color--foreground--0: rgb(243 230 207 / 0);
-  --color--background--100: rgba(233, 129, 79, 0.9);
+  --color--background--100: rgb(233 136 90);
   --color--background--0: rgb(233 79 14 / 0);
   --color--gradient: linear-gradient(
     135deg,

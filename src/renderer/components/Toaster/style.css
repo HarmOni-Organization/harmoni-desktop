@@ -1,0 +1,13 @@
+body {
+  --toastify-toast-width: 345px;
+
+  --toastify-color-progress-info: var(--color--mixed--info) !important;
+  --toastify-color-progress-success: var(--color--mixed--success) !important;
+  --toastify-color-progress-warning: var(--color--mixed--warning) !important;
+  --toastify-color-progress-error: var(--color--mixed--error) !important;
+
+  --toastify-icon-color-info: var(--color--mixed--info) !important;
+  --toastify-icon-color-success: var(--color--mixed--success) !important;
+  --toastify-icon-color-warning: var(--color--mixed--warning) !important;
+  --toastify-icon-color-error: var(--color--mixed--error) !important;
+}
