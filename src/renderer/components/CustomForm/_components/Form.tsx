@@ -1,22 +1,27 @@
-import React, { forwardRef, useImperativeHandle } from 'react';
+import { forwardRef, useImperativeHandle } from 'react';
 
-import type { FormState } from '../hooks/useForm';
+import type { FormFields } from '../hooks/useForm';
 import { FormProvider, useFormContext } from './FormProvider';
 
 /**
  * @typedef {Object} FormProps
- * @property {FormState} initialFormState - The initial state of the form.
+ * @property {FormFields} initialFormState - The initial state of the form.
  * @property {function(Object): void} onSubmit - Callback function for when the form is submitted.
  * @property {function(): void} [onReset] - Optional callback function for when the form is reset.
  * @property {function(): void} [resetForm] - Optional function to manually reset the form.
  * @property {React.ReactNode} children - Child elements to render within the form.
  */
 export interface FormProps {
-  initialFormState: FormState;
+  initialFormState: FormFields;
   onSubmit: (formData: Record<string, string>) => void;
   onReset?: () => void;
   resetForm?: () => void;
   children: React.ReactNode;
+  updateFieldValue?: (
+    field: string,
+    value: string,
+    callback?: () => Promise<void>,
+  ) => void;
 }
 
 interface FormContentProps extends Omit<FormProps, 'initialFormState'> {}
