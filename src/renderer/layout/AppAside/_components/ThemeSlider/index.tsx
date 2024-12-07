@@ -4,7 +4,7 @@ import clsx from 'classnames';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 
-import store from '../../../../core/stores/RootStore';
+import preferencesStore from '../../../../core/stores/PreferencesStore';
 import useAppTheme from '../../../../hooks/useAppTheme';
 import { useThemeSlider } from '../../../../hooks/useThemeSlider';
 import { appThemeRemoveAll } from '../../../../utils/helper';
@@ -27,7 +27,6 @@ const THEME_COUNT = 17; // Total number of theme options in the slider
 function ThemeSlider(): JSX.Element {
   useAppTheme();
 
-  const { theme, setTheme } = store.preferencesStore;
   const { themeSliderRef, isSliderVisible, isTouchDevice } = useThemeSlider();
 
   /**
@@ -40,12 +39,10 @@ function ThemeSlider(): JSX.Element {
     const formattedValue =
       sliderValue < 10 ? `0${sliderValue}` : `${sliderValue}`;
 
-    setTheme(sliderValue);
+    preferencesStore.setTheme(sliderValue);
 
-    // Remove all existing theme classes from the body
     appThemeRemoveAll();
 
-    // Apply the new theme class based on slider value
     document.body.classList.add(`theme--${formattedValue}`);
   };
 
@@ -77,7 +74,7 @@ function ThemeSlider(): JSX.Element {
           min="0"
           max={THEME_COUNT - 1}
           step="1"
-          value={theme}
+          value={preferencesStore.theme}
           onChange={handleSliderChange}
           aria-label="Select Theme"
         />
