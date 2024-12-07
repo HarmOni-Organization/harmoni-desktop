@@ -1,27 +1,32 @@
 import 'react-toastify/dist/ReactToastify.css';
 import './style.css';
 
+import type { ToastOptions } from 'react-toastify';
 import { toast, ToastContainer } from 'react-toastify';
 
 // Toast Utility Function
 type ToastType = 'success' | 'error' | 'info' | 'warning';
 
-export const showToast = (message: string, type: ToastType = 'info') => {
+export const showToast = (
+  message: string,
+  type: ToastType = 'info',
+  option: ToastOptions = {},
+) => {
   switch (type) {
     case 'success':
-      toast.success(message);
+      toast.success(message, option);
       break;
     case 'error':
-      toast.error(message);
+      toast.error(message, option);
       break;
     case 'info':
-      toast.info(message);
+      toast.info(message, option);
       break;
     case 'warning':
-      toast.warn(message);
+      toast.warn(message, option);
       break;
     default:
-      toast(message);
+      toast(message, option);
   }
 };
 
