@@ -44,7 +44,7 @@ const schema: { [K in keyof StoreSchema]: object } = {
         required: ['userId', 'username', 'token', 'email'], // Email is optional
       },
     },
-    default: { user: null }, // Default to no authenticated user
+    default: { currentUser: null }, // Default to no authenticated user
   },
 };
 // Singleton class to ensure only one instance of the store
