@@ -1,6 +1,5 @@
 .header {
   position: fixed;
-  width: 100%;
   padding-left: var(--grid--app-margin);
   padding-right: var(--grid--app-margin);
   z-index: 100;
@@ -84,7 +83,6 @@
 .header .contact {
   display: flex;
   padding: 12px 0;
-  font-size: var(--font--size-medium);
   line-height: 1;
   cursor: pointer;
 }
@@ -206,6 +204,9 @@ body.mobile-nav--is--visible .header .navigation .line:nth-child(2) .content {
 
   .header .navigation {
     display: flex;
+  }
+  .header {
+    width: 100%;
   }
 }
 

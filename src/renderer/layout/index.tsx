@@ -1,6 +1,10 @@
+import { observer } from 'mobx-react-lite';
+
 import Breadcrumb from '../components/Breadcrumb';
 import Cover from '../components/Cover';
+import loadingStore from '../core/stores/LoadingStore';
 import useKeydownEvents from '../hooks/useKeydownEvents';
+import { UserAuthSection, UserDropdownMenu } from '../modules/auth';
 import { AppAside } from './AppAside';
 import GridOverlay from './GridOverlay';
 import { Header } from './Header';
@@ -25,26 +29,27 @@ function MainLayout({
   useKeydownEvents();
   return (
     <>
-      {/* Header uses the appName, which can be passed as a prop or loaded from config */}
       <Header name={appName} />
       <AppAside />
 
       <main className="app-main">
-        {/* The Cover component renders the app's cover page */}
         <Cover />
-        <section className="section" style={{ height: '100vh' }}>
-          <NavigationMenu />
-          <div className="content">
-            <Breadcrumb />
-            <div className="main">
-              {children} {/* Dynamic children elements */}
-            </div>
-          </div>
-        </section>
+        {loadingStore.allModulesLoaded && (
+          <>
+            <UserAuthSection />
+            <section className="section" style={{ height: '100vh' }}>
+              <NavigationMenu />
+              <div className="content">
+                <Breadcrumb avatar={<UserDropdownMenu />} />
+                <div className="main">{children}</div>
+              </div>
+            </section>
+          </>
+        )}
       </main>
       <GridOverlay />
     </>
   );
 }
 
-export default MainLayout;
+export default observer(MainLayout);
