@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import React, { useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 
 import { Form, Input, SubmitButton } from '../../../components/CustomForm';
 import type { FormProps } from '../../../components/CustomForm/_components/Form';
@@ -56,7 +56,9 @@ function RegisterForm() {
 
       // Reset form if registration is successful
       if (!authStore.authState.authError) {
-        formReference.current?.resetForm?.();
+        setTimeout(() => {
+          formReference.current?.resetForm?.();
+        });
       }
     } catch (error) {
       console.error('Registration Error:', error);
