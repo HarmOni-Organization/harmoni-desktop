@@ -52,7 +52,7 @@ export const useForm = (initialFormFields: FormFields) => {
         }
         callback?.();
       },
-      300,
+      500,
     ),
     [],
   );
