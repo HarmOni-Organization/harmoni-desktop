@@ -104,6 +104,12 @@ export const createWindow = async () => {
     },
   );
 
+  ipcMain.on('electron-store-delete', (event, key) => {
+    store.delete(key);
+    // eslint-disable-next-line no-param-reassign
+    event.returnValue = true;
+  });
+
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
 
