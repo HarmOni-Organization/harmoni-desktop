@@ -8,38 +8,32 @@ import { watchTogetherNavigation } from '../modules/watchTogether/navigation';
 export const navigationConfig = {
   ...watchTogetherNavigation,
   sectionOne: {
-    component: <div>Section 1 Content</div>,
+    component: () => <div>Section 1 Content</div>,
     label: 'Section 1',
     icon: <ItemPlaceholderIcon />,
+    persistent: false,
   },
   sectionTwo: {
-    component: <div>Section 2 Content</div>,
+    component: () => <div>Section 2 Content</div>,
     label: 'Section 2',
     icon: <ItemPlaceholderIcon />,
+    persistent: true,
   },
   sectionThree: {
-    component: <div>Section 3 Content</div>,
+    component: () => <div>Section 3 Content</div>,
     label: 'Section 3',
     icon: <ItemPlaceholderIcon />,
+    persistent: false,
   },
   sectionFour: {
-    component: <div>Section 4 Content</div>,
+    component: () => <div>Section 4 Content</div>,
     label: 'Section 4',
     icon: <ItemPlaceholderIcon />,
+    persistent: true,
   },
   sectionFive: {
-    component: <div>Section 5 Content</div>,
+    component: () => <div>Section 5 Content</div>,
     label: 'Section 5',
-    icon: <ItemPlaceholderIcon />,
-  },
-  sectionSix: {
-    component: <div>Section 6 Content</div>,
-    label: 'Section 6',
-    icon: <ItemPlaceholderIcon />,
-  },
-  sectionSeven: {
-    component: <div>Section 7 Content</div>,
-    label: 'Section 7',
     icon: <ItemPlaceholderIcon />,
   },
 };

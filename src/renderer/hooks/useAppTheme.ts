@@ -1,6 +1,6 @@
 import { useLayoutEffect } from 'react';
 
-import store from '../core/stores/RootStore';
+import preferencesStore from '../core/stores/PreferencesStore';
 import { appThemeRemoveAll } from '../utils/helper';
 
 /**
@@ -10,12 +10,10 @@ import { appThemeRemoveAll } from '../utils/helper';
  * @returns {() => void} A function that toggles between the two themes.
  */
 const useAppTheme = () => {
-  const { theme } = store.preferencesStore;
-
   useLayoutEffect(() => {
+    const { theme } = preferencesStore;
     const { body } = document;
 
-    // Remove all current theme classes and apply the new theme
     appThemeRemoveAll();
 
     body.classList.add(`theme--${theme.toString().padStart(2, '0')}`);
@@ -26,7 +24,7 @@ const useAppTheme = () => {
     if (sliderElement) {
       sliderElement.value = theme.toString();
     }
-  }, [theme]);
+  }, [preferencesStore.theme]);
 
   return null;
 };

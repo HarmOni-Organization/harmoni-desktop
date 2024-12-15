@@ -64,6 +64,11 @@ figure {
   position: relative;
 }
 
+.image{
+  overflow: hidden;
+  position: relative;
+}
+
 .image img {
   width: 100%;
   height: 100%;
@@ -90,4 +95,134 @@ figure {
 
 .scroll-container *::-webkit-scrollbar-thumb:hover {
   background-color: #555;
+}
+
+/* Show the active tab */
+.active-tab {
+  display: block;
+}
+
+/* Hide inactive tabs */
+.inactive-tab {
+  display: none;
+}
+
+.loading-spinner {
+  --width: 16px;
+  position: absolute;
+  top: calc(50% - var(--width) / 2);
+  transform: translateY(-50%);
+  width: var(--width);
+  height: var(--width);
+  border: 2px solid var(--color--foreground--50);
+  border-top-color: var(--color--foreground--100);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-spinner.light {
+  border: 2px solid var(--color--background--100);
+  border-top-color: var(--color--foreground--33);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Base styles for the Image */
+.Image {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  position: relative;
+}
+
+.Image img {
+  width: 100%;
+  height: 100%;
+}
+
+/* Overlay effects */
+.Image::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color--background--100);
+  opacity: 0.33;
+  mix-blend-mode: multiply;
+  pointer-events: none; /* Ensure overlay doesn't block interaction */
+  border-radius: 50%; /* Ensures the overlay fits the circle shape */
+}
+
+/* Second overlay effect (similar to .image-overlay-02) */
+.Image::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color--foreground--100);
+  mix-blend-mode: lighten;
+  pointer-events: none; /* Ensure overlay doesn't block interaction */
+  border-radius: 50%; /* Ensures the overlay fits the circle shape */
+}
+
+/* Adjusting styles based on themes (use these if needed) */
+body.theme--15 .Image::before,
+body.theme--14 .Image::before,
+body.theme--13 .Image::before,
+body.theme--12 .Image::before,
+body.theme--11 .Image::before,
+body.theme--10 .Image::before,
+body.theme--09 .Image::before {
+  background-color: var(--color--background--100);
+}
+
+body.theme--15 .Image::after,
+body.theme--14 .Image::after,
+body.theme--13 .Image::after,
+body.theme--12 .Image::after,
+body.theme--11 .Image::after,
+body.theme--10 .Image::after,
+body.theme--09 .Image::after {
+  background-color: var(--color--foreground--100);
+}
+
+body.theme--08 .Image::before,
+body.theme--07 .Image::before,
+body.theme--06 .Image::before,
+body.theme--05 .Image::before,
+body.theme--04 .Image::before,
+body.theme--03 .Image::before,
+body.theme--02 .Image::before,
+body.theme--01 .Image::before {
+  background-color: var(--color--foreground--100);
+}
+
+body.theme--08 .Image::after,
+body.theme--07 .Image::after,
+body.theme--06 .Image::after,
+body.theme--05 .Image::after,
+body.theme--04 .Image::after,
+body.theme--03 .Image::after,
+body.theme--02 .Image::after,
+body.theme--01 .Image::after {
+  background-color: var(--color--background--100);
+}
+
+/* Hiding overlays for specific themes */
+body.theme--16 .Image::before,
+body.theme--16 .Image::after,
+body.theme--00 .Image::before,
+body.theme--00 .Image::after {
+  display: none;
 }

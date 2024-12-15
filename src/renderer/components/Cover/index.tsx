@@ -1,43 +1,33 @@
 import './style.css';
 
+import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
 
-/**
- * Custom hook to manage the app cover's visibility and loading state.
- *
- * It hides the cover after a set delay and removes the 'loading' class after a longer delay.
- * Both timeouts are cleared when the component unmounts to prevent memory leaks.
- *
- * @returns {void}
- */
-const useAppCoverVisibility = (): void => {
+import loadingStore from '../../core/stores/LoadingStore';
+
+const Cover = observer((): JSX.Element => {
   useEffect(() => {
-    const hideCoverAfterDelay = setTimeout(() => {
-      document.body.classList.remove('cover--is--visible');
-    }, 1750);
+    let hideCoverAfterDelay: NodeJS.Timeout | undefined;
+    let removeLoadingStateAfterDelay: NodeJS.Timeout | undefined;
 
-    const removeLoadingStateAfterDelay = setTimeout(() => {
-      document.body.classList.remove('is--loading');
-    }, 3250);
+    // When all modules are loaded, hide the cover and remove loading state
+    if (loadingStore.allModulesLoaded) {
+      hideCoverAfterDelay = setTimeout(() => {
+        document.body.classList.remove('cover--is--visible');
+      }, 1750);
 
-    // Cleanup timeouts on component unmount
+      removeLoadingStateAfterDelay = setTimeout(() => {
+        document.body.classList.remove('is--loading');
+      }, 3250);
+    }
+
+    // Cleanup timeout on component unmount
     return () => {
       clearTimeout(hideCoverAfterDelay);
       clearTimeout(removeLoadingStateAfterDelay);
     };
-  }, []);
-};
+  }, [loadingStore.allModulesLoaded]);
 
-/**
- * Cover Component
- *
- * This component displays the app's cover screen with the title and tagline.
- * It utilizes the `useAppCoverVisibility` hook to manage the cover's visibility state.
- *
- * @returns {JSX.Element} The rendered cover section with HarmOni branding.
- */
-function Cover(): JSX.Element {
-  useAppCoverVisibility();
   return (
     <section className="section cover">
       <div className="content">
@@ -49,6 +39,6 @@ function Cover(): JSX.Element {
       </div>
     </section>
   );
-}
+});
 
 export default Cover;

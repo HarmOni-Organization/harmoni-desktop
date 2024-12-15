@@ -1,0 +1,73 @@
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  color: var(--color--foreground--100);
+  margin-bottom: 6px;
+}
+
+.form-group .input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--color--foreground--10);
+  background-color: var(--color--foreground--5);
+  color: color-mix(
+    in lab,
+    var(--color--background--100),
+    var(--color--foreground--100) 90%
+  );
+  border-radius: 8px;
+  &::placeholder {
+    color: var(--color--foreground--50);
+  }
+}
+
+.form-group input:focus {
+  border-color: var(--color--foreground--20);
+  box-shadow: 0 0 5px var(--color--foreground--10);
+  outline: none;
+}
+
+.form-group input.form-input--error {
+  border-color: var(--color--mixed--red);
+}
+
+.form-group input.form-input--loading {
+  background-color: var(--color--foreground--10);
+  cursor: not-allowed;
+}
+
+.form-group .loading-spinner {
+  right: 10px;
+  top: calc(50% - 8px);
+}
+
+.form-group .form-error {
+  color: var(--color--mixed--red);
+  font-size: var(--font--size-small);
+  display: block;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+.form-group .validation-success-indicator {
+  position: absolute;
+  right: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+}
+
+.form-group .validation-success-indicator svg {
+  color: var(--color--mixed--success);
+}

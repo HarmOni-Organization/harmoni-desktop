@@ -1,0 +1,27 @@
+.submit-button {
+  position: relative;
+  width: 100%;
+  padding: 12px;
+  background-color: var(--color--foreground--100);
+  color: var(--color--background--100);
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  min-height: 45px;
+}
+
+.submit-button:hover {
+  background-color: var(--color--foreground--50);
+  box-shadow: 0 4px 8px var(--color--foreground--15);
+}
+
+.submit-button:disabled {
+  background-color: var(--color--foreground--100);
+  box-shadow: unset;
+
+  cursor: not-allowed;
+}
+
+.submit-button .loading-spinner {
+  --width: 25px;
+}

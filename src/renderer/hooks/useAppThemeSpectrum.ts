@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import useAppThemeRemoveAll from './useAppThemeRemoveAll';
+// import useAppThemeRemoveAll from './useAppThemeRemoveAll';
 
 /**
  * Custom hook to cycle through themes in a spectrum.
@@ -9,7 +9,15 @@ import useAppThemeRemoveAll from './useAppThemeRemoveAll';
  * @returns {(isReverse?: boolean) => void} A function to cycle through the themes. Pass `true` to cycle forward.
  */
 const useAppThemeSpectrum = () => {
-  const removeAllThemes = useAppThemeRemoveAll();
+  /**
+   * Removes all classes from the body that start with 'theme--'.
+   */
+  const removeAllThemes = useCallback(() => {
+    document.body.className = document.body.className
+      .split(' ')
+      .filter((className) => !className.startsWith('theme--'))
+      .join(' ');
+  }, []);
 
   /**
    * Toggles between 'theme--00' and 'theme--16'.

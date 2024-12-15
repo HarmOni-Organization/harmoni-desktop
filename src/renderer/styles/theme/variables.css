@@ -10,6 +10,7 @@
   --font--size-large: clamp(26px, 1.81vw, 1.81vw);
   --font--size-medium: 26px;
   --font--size-regular: 16px;
+  --font--size-small: 14px;
   --font--size-regular-line-height: 1.25;
 }
 

@@ -1,9 +1,11 @@
-// Disable no-unused-vars, broken for spread args
-/* eslint no-unused-vars: off */
 import type { IpcRendererEvent } from 'electron';
 import { contextBridge, ipcRenderer } from 'electron';
 
-export type Channels = 'ipc-example';
+export type Channels =
+  | 'ipc-example'
+  | 'electron-store-get'
+  | 'electron-store-set'
+  | 'electron-store-delete';
 
 const electronHandler = {
   ipcRenderer: {
@@ -25,10 +27,23 @@ const electronHandler = {
   },
   store: {
     get(key: string) {
-      return ipcRenderer.sendSync('electron-store-get', key);
+      try {
+        return ipcRenderer.sendSync('electron-store-get', key);
+      } catch (error) {
+        console.error(`Error getting key "${key}" from store:`, error);
+        return null;
+      }
     },
     set(property: string, val: unknown) {
       ipcRenderer.send('electron-store-set', property, val);
+    },
+    delete(key: string) {
+      try {
+        return ipcRenderer.sendSync('electron-store-delete', key);
+      } catch (error) {
+        console.error(`Error deleting key "${key}" from store:`, error);
+        return false;
+      }
     },
   },
 };

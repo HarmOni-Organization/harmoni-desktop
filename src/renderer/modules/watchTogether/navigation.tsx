@@ -7,8 +7,9 @@ import WatchTogetherHome from './WatchTogetherHome';
  */
 export const watchTogetherNavigation = {
   watchTogether: {
-    component: <WatchTogetherHome />,
+    component: WatchTogetherHome,
     label: 'Watch Together',
     icon: <WatchTogetherIcon />,
+    persistent: true,
   },
 };

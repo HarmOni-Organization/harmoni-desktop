@@ -1,15 +1,19 @@
 .breadcrumb {
   display: flex;
-  align-items: center;
   padding: 15px 20px;
   border-radius: 12px;
   margin: 20px 0;
   background-color: var(--color--foreground--15);
-  backdrop-filter: blur(8px);
   z-index: 98999;
   min-height: 70px;
   -webkit-user-select: none;
   user-select: none;
+  justify-content: space-between;
+}
+
+.breadcrumb-container {
+  display: flex;
+  align-items: center;
 }
 
 .breadcrumb .icon-container {
@@ -39,7 +43,7 @@
   color: var(--color--mixed--red);
 }
 
-.separator {
+.breadcrumb .separator {
   font-size: var(--font--size-large);
   color: var(--color--foreground--20);
 }
