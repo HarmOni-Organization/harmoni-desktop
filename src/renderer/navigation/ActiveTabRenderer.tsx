@@ -19,7 +19,21 @@ function ActiveTabRenderer() {
 
     Object.keys(navigationConfig).forEach((tabId) => {
       const { component: TabComponent } = navigationConfig[tabId];
-      componentCache[tabId] = React.memo(TabComponent);
+
+      // Check if TabComponent is a valid React component (function or class)
+      if (typeof TabComponent === 'function') {
+        componentCache[tabId] = React.memo(TabComponent);
+      } else {
+        console.warn(
+          `Invalid component for tab ${tabId}. Component must be a function or class.`,
+        );
+        // Provide a fallback component
+        componentCache[tabId] = () => (
+          <div className="error-component">
+            <p>Error: Invalid component</p>
+          </div>
+        );
+      }
     });
 
     return componentCache;
@@ -31,6 +45,11 @@ function ActiveTabRenderer() {
         const { persistent, authRequired } = navigationConfig[tabId];
         const MemoizedComponent = memoizedTabComponents[tabId];
         const isTabActive = tabId === currentTab;
+
+        // Skip if we don't have a valid component
+        if (!MemoizedComponent) {
+          return null;
+        }
 
         // Check if the section requires authentication
         if (authRequired && !authStore.isAuthenticated) {

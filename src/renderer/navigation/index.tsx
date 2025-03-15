@@ -1,3 +1,4 @@
+import { libraryManagerNavigation } from '@modules/libraryManager/navigation';
 import { watchTogetherNavigation } from '@modules/watchTogether/navigation';
 
 import ItemPlaceholderIcon from '../assets/icons/ItemPlaceholderIcon';
@@ -8,6 +9,7 @@ import ItemPlaceholderIcon from '../assets/icons/ItemPlaceholderIcon';
  */
 export const navigationConfig = {
   ...watchTogetherNavigation,
+  ...libraryManagerNavigation,
   sectionOne: {
     component: () => <div>Section 1 Content</div>,
     label: 'Section 1',
