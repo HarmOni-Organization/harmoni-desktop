@@ -41,6 +41,22 @@ const useKeydownEvents = () => {
             cycleThemes(); // Cycle backward
             break;
 
+          case '?':
+          case '/': {
+            // Toggle visibility of the CommandInput element
+            const wrapper = document.querySelector('.command-input');
+            if (wrapper) {
+              wrapper.classList.toggle('visible');
+              wrapper.classList.toggle('hidden');
+              (
+                document.querySelector(
+                  '.command-input.visible .input',
+                ) as HTMLElement
+              )?.focus();
+            }
+            break;
+          }
+
           default:
             break;
         }

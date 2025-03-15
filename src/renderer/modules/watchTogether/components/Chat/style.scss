@@ -1,0 +1,274 @@
+$padding-default: 12px;
+$border-radius-default: 10px;
+$bubble-border-radius: 25px;
+$font-size-regular: 16px;
+
+.chat-container {
+  grid-column: 4 / -1;
+
+  display: flex;
+  flex-direction: column;
+  border-radius: $border-radius-default; // Rounded corners
+  overflow: hidden; // Hide overflow outside the container
+  .ChatApp {
+    background-color: transparent; // Change the background color
+    border: 2px solid var(--color--foreground--10, #e0e0e0); // Add fallback
+    border-radius: 12px;
+    height: calc(100% - 80px);
+  }
+
+  .Chat-container {
+    overflow-y: auto; // Enable vertical scrolling
+  }
+
+  .chat-title {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 30px;
+    margin-top: 19px;
+    margin-left: 0;
+
+    .leave-room-icon {
+      cursor: pointer;
+    }
+  }
+
+  .Chat-messageList {
+    padding: 0 $padding-default;
+  }
+
+  .ChatFooter {
+    background-color: transparent;
+  }
+
+  .Bubble {
+    border-radius: $bubble-border-radius;
+    padding: $padding-default;
+    font-size: $font-size-regular;
+  }
+
+  .Composer {
+    margin: 1rem 22px;
+    padding: 0;
+    background-color: var(--color--foreground--5, #f0f0f0); // Add fallback
+    border-radius: 12px;
+  }
+
+  .Composer-inputWrap {
+    background-color: transparent;
+    padding: 1rem;
+  }
+
+  .Composer-input {
+    background-color: transparent;
+    color: var(--color--foreground--100, #000); // Add fallback
+  }
+
+  .Composer-input::placeholder {
+    color: var(--color--foreground--50, #888); // Add fallback
+  }
+
+  .Composer-actions {
+    height: 100%;
+  }
+
+  .Composer-sendBtn {
+    background: var(--color--foreground--50, #999); // Add fallback
+    color: var(--color--background--100, #fff); // Add fallback
+
+    &:hover {
+      background: var(--color--foreground--100, #333) !important; // Add fallback
+    }
+
+    border-radius: 12px;
+    padding: 0.5rem 2rem;
+    margin-left: 1rem;
+    font-size: var(--font--size-regular, 16px); // Add fallback
+    margin-right: 16px;
+    margin-bottom: 13px;
+  }
+
+  .Bubble {
+    border-radius: 25px;
+  }
+
+  .Message-main {
+    align-items: end;
+  }
+
+  .Avatar:has(+ .Message-inner .Message-author--name) {
+    margin-bottom: 25px;
+  }
+
+  .Message {
+    &.left .Bubble {
+      background-color: var(--color--foreground--10, #e0e0e0); // Add fallback
+      color: var(--color--foreground--100, #000); // Add fallback
+      margin-right: 10rem;
+      border-radius: 22px;
+      border-bottom-left-radius: 0;
+    }
+
+    &.right .Bubble {
+      background-color: var(--color--foreground--100, #333); // Add fallback
+      color: var(--color--background--100, #fff); // Add fallback
+      margin-left: 10rem;
+      border-radius: 20px;
+      border-bottom-right-radius: 0;
+    }
+
+    .Typing-dot{
+      background: var(--color--foreground--100, #e0e0e0);
+    }
+  }
+
+  .Message-inner {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .Time,
+  .Message-author {
+    user-select: none;
+  }
+  .Time {
+    color: var(--color--foreground--50, #888);
+  }
+
+  .Message-inner > .Message-author {
+    display: none;
+  }
+
+  .Message-author {
+    color: var(--color--foreground--50, #888); // Add fallback
+    margin: 5px 5px 5px 15px;
+
+    .Message-author--data {
+      content: var(--_time-author-content);
+      color: var(--color--foreground--33, #555); // Add fallback
+      margin-left: 5px;
+    }
+  }
+}
+
+@media all and (max-width: 1350px) {
+  .chat-container {
+    max-height: calc(100vh - 140px);
+
+    grid-column: 4 / -1;
+  }
+}
+
+@media (max-width: 1020px) {
+  .chat-container {
+    max-height: calc(100vh - 200px);
+    grid-column: 3 / -1;
+  }
+}
+
+@media (max-width: 760px) {
+  .chat-container {
+  max-height: calc(100vh - 200px);
+
+    grid-column: 1 / -1;
+  }
+}
+
+/* Base styles for the Avatar */
+.Avatar {
+  position: relative;
+  display: inline-block;
+}
+
+/* Overlay effects */
+.Avatar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color--background--100);
+  opacity: 0.33;
+  mix-blend-mode: multiply;
+  pointer-events: none; /* Ensure overlay doesn't block interaction */
+  border-radius: 50%; /* Ensures the overlay fits the circle shape */
+}
+
+/* Second overlay effect (similar to .image-overlay-02) */
+.Avatar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color--foreground--100);
+  mix-blend-mode: lighten;
+  pointer-events: none; /* Ensure overlay doesn't block interaction */
+  border-radius: 50%; /* Ensures the overlay fits the circle shape */
+}
+
+/* Adjusting styles based on themes (use these if needed) */
+body.theme--15 .Avatar::before,
+body.theme--14 .Avatar::before,
+body.theme--13 .Avatar::before,
+body.theme--12 .Avatar::before,
+body.theme--11 .Avatar::before,
+body.theme--10 .Avatar::before,
+body.theme--09 .Avatar::before {
+  background-color: var(--color--background--100);
+}
+
+body.theme--15 .Avatar::after,
+body.theme--14 .Avatar::after,
+body.theme--13 .Avatar::after,
+body.theme--12 .Avatar::after,
+body.theme--11 .Avatar::after,
+body.theme--10 .Avatar::after,
+body.theme--09 .Avatar::after {
+  background-color: var(--color--foreground--100);
+}
+
+body.theme--08 .Avatar::before,
+body.theme--07 .Avatar::before,
+body.theme--06 .Avatar::before,
+body.theme--05 .Avatar::before,
+body.theme--04 .Avatar::before,
+body.theme--03 .Avatar::before,
+body.theme--02 .Avatar::before,
+body.theme--01 .Avatar::before {
+  background-color: var(--color--foreground--100);
+}
+
+body.theme--08 .Avatar::after,
+body.theme--07 .Avatar::after,
+body.theme--06 .Avatar::after,
+body.theme--05 .Avatar::after,
+body.theme--04 .Avatar::after,
+body.theme--03 .Avatar::after,
+body.theme--02 .Avatar::after,
+body.theme--01 .Avatar::after {
+  background-color: var(--color--background--100);
+}
+
+/* Hiding overlays for specific themes */
+body.theme--16 .Avatar::before,
+body.theme--16 .Avatar::after,
+body.theme--00 .Avatar::before,
+body.theme--00 .Avatar::after {
+  display: none;
+}
+
+
+/* Change text selection color */
+::selection {
+  background-color: #fae49d; /* Your desired highlight background color */
+  color: #000000; /* Your desired text color when highlighted */
+}
+
+::-webkit-selection {
+  background-color: #fae49d;
+  color: #000000;
+}

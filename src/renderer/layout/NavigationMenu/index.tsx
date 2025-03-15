@@ -2,8 +2,9 @@ import './style.css';
 
 import clsx from 'classnames';
 
-import { useNavigation } from '../../contexts/NavigationContext';
-import { navigationConfig } from '../../navigation';
+import { useNavigation } from '@contexts/NavigationContext';
+import { navigationConfig } from '@navigation/index';
+
 import { navigationMenuClasses } from './navigationMenuClasses';
 
 /**
@@ -16,22 +17,18 @@ import { navigationMenuClasses } from './navigationMenuClasses';
 function NavigationMenu(): JSX.Element {
   const { currentTab, setCurrentTab } = useNavigation();
 
-  /**
-   * Handles the click event when a navigation item is selected.
-   *
-   * @param {string} key - The unique key of the selected item.
-   */
   const handleItemSelect = (key: string) => {
-    setCurrentTab(key); // Update the current tab in the navigation context
+    setCurrentTab(key);
   };
 
   // Dynamically generate menu items from the navigationConfig
   const menuItems = Object.keys(navigationConfig)
-    .filter((key) => key !== 'notFound') // Exclude non-navigable items
+    .filter((key) => key !== 'notFound')
     .map((key) => ({
       key,
+      id: navigationConfig[key].id,
       label: navigationConfig[key].label || 'Unnamed Item',
-      icon: navigationConfig[key].icon, // Use the icon from the config
+      icon: navigationConfig[key].icon,
     }));
 
   return (
@@ -40,14 +37,15 @@ function NavigationMenu(): JSX.Element {
         {menuItems.map((item) => (
           <div
             key={item.key}
+            id={item.id}
             className={clsx(navigationMenuClasses.item, {
-              [navigationMenuClasses.isActive]: item.key === currentTab, // Conditionally apply active class
+              [navigationMenuClasses.isActive]: item.key === currentTab,
             })}
-            onClick={() => handleItemSelect(item.key)} // Handle click event
+            onClick={() => handleItemSelect(item.key)}
             aria-label={item.label}
             role="button"
-            tabIndex={0} // Make the item focusable for keyboard navigation
-            onKeyDown={(e) => e.key === 'Enter' && handleItemSelect(item.key)} // Handle Enter key for selection
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && handleItemSelect(item.key)}
           >
             <div className="icon-container">{item.icon}</div>
             <span className="no-wrap-text">{item.label}</span>

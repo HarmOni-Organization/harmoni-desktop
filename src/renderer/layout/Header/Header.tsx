@@ -4,8 +4,9 @@ import { useMemo } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import hornsImageSource from '../../assets/images/horns.png';
-import { useMobileNav } from '../../hooks/useMobileNav';
+import hornsImageSource from '@assets/images/horns.png';
+import { useMobileNav } from '@hooks/useMobileNav';
+
 import type { HeaderProps } from './Header.types';
 import { Brand } from './styles';
 

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { appThemeRemoveAll, limitNumberWithinRange } from '../utils/helper';
+import { appThemeRemoveAll, limitNumberWithinRange } from '@utils/helper';
 
 /**
  * Custom hook to manage theme slider visibility and interactions based on

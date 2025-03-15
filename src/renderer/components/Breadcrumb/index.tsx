@@ -2,8 +2,8 @@ import './style.css';
 
 import React, { useMemo } from 'react';
 
-import { useNavigation } from '../../contexts/NavigationContext';
-import { navigationConfig } from '../../navigation';
+import { useNavigation } from '@contexts/NavigationContext';
+import { navigationConfig } from '@navigation/index';
 
 /**
  * @typedef {Object} BreadcrumbProps

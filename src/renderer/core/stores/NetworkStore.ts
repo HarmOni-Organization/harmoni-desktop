@@ -1,5 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 
+import SocketInstance from '@services/socketInstance';
+
 import loadingStore from './LoadingStore';
 
 class NetworkStore {
@@ -11,9 +13,7 @@ class NetworkStore {
 
   queuedActions: Array<() => Promise<void>> = []; // Actions queued for retry when offline
 
-  estimatedDownloadSpeedMbps: number | null = null; // Estimated download speed in Mbps
-
-  private connectivityCheckIntervalId: NodeJS.Timeout | null = null;
+  estimatedDownloadSpeedMbps: number | null = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -22,14 +22,14 @@ class NetworkStore {
 
   /**
    * Initializes the NetworkStore.
-   * Sets up event listeners for network changes and starts periodic connectivity checks.
+   * Sets up WebSocket-based event listeners and updates online status.
    * Marks the module as loaded upon successful initialization.
    */
   async initializeNetworkStore() {
     try {
+      this.setupWebSocketListeners();
+      this.updateOnlineStatus(SocketInstance.getInstance().connected); // Initial status
       this.setupEventListeners();
-      this.startPeriodicConnectivityCheck();
-      await this.performInitialConnectivityCheck();
       loadingStore.markModuleLoaded('NetworkStore');
     } catch (error) {
       console.error('Error initializing NetworkStore:', error);
@@ -41,9 +41,6 @@ class NetworkStore {
    * Sets up event listeners for online and offline status changes.
    */
   setupEventListeners() {
-    window.addEventListener('online', this.handleOnlineStatusChange);
-    window.addEventListener('offline', this.handleOfflineStatusChange);
-
     const connection = navigator.connection as NetworkInformation | undefined;
     if (connection) {
       this.updateConnectionDetails();
@@ -54,21 +51,30 @@ class NetworkStore {
   }
 
   /**
-   * Starts a periodic check for internet connectivity every minute.
+   * Sets up WebSocket event listeners for online/offline status updates.
    */
-  startPeriodicConnectivityCheck() {
-    this.connectivityCheckIntervalId = setInterval(
-      this.checkInternetConnectivity,
-      60000,
-    );
+  private setupWebSocketListeners() {
+    const socket = SocketInstance.getInstance();
+
+    socket.on('connect', this.handleSocketConnect);
+    socket.on('disconnect', this.handleSocketDisconnect);
   }
 
   /**
-   * Performs the initial connectivity check to determine the current network status.
+   * Handles the WebSocket "connect" event.
+   * Updates the `onlineStatus` to true and records the current time.
    */
-  async performInitialConnectivityCheck() {
-    await this.checkInternetConnectivity();
-  }
+  private handleSocketConnect = () => {
+    this.updateOnlineStatus(true);
+  };
+
+  /**
+   * Handles the WebSocket "disconnect" event.
+   * Updates the `onlineStatus` to false.
+   */
+  private handleSocketDisconnect = () => {
+    this.updateOnlineStatus(false);
+  };
 
   /**
    * Updates network connection details, including type and estimated speed.
@@ -81,42 +87,16 @@ class NetworkStore {
   };
 
   /**
-   * Handles the "online" event by rechecking internet connectivity.
+   * Updates the online status and records the last online time if applicable.
+   * @param status - The current online status (true = online, false = offline).
    */
-  handleOnlineStatusChange = () => {
-    this.checkInternetConnectivity();
-  };
-
-  /**
-   * Handles the "offline" event by setting the online status to false.
-   */
-  handleOfflineStatusChange = () => {
-    this.onlineStatus = false;
-  };
-
-  /**
-   * Checks internet connectivity by making a request to a reliable external source.
-   * Includes a timeout to prevent prolonged loading times when there is no connection.
-   * Updates the `onlineStatus` based on the success or failure of the request.
-   */
-  checkInternetConnectivity = async () => {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // Set timeout to 5 seconds
-
-    try {
-      await fetch('https://www.google.com', {
-        mode: 'no-cors',
-        signal: controller.signal,
-      });
-      this.onlineStatus = true;
+  private updateOnlineStatus(status: boolean) {
+    this.onlineStatus = status;
+    if (status) {
       this.lastOnlineTime = new Date();
       this.retryQueuedActions();
-    } catch {
-      this.onlineStatus = false;
-    } finally {
-      clearTimeout(timeoutId);
     }
-  };
+  }
 
   /**
    * Queues an action for retry when the network is back online.
@@ -133,6 +113,9 @@ class NetworkStore {
     }
   }
 
+  /**
+   * Retries queued actions when the network is back online.
+   */
   async retryQueuedActions() {
     if (this.onlineStatus) {
       console.log('Retrying queued actions...');
@@ -150,19 +133,16 @@ class NetworkStore {
   }
 
   /**
-   * Cleans up event listeners and intervals when the store is disposed of.
+   * Cleans up WebSocket event listeners when the store is disposed of.
    */
   dispose() {
-    window.removeEventListener('online', this.handleOnlineStatusChange);
-    window.removeEventListener('offline', this.handleOfflineStatusChange);
+    const socket = SocketInstance.getInstance();
 
+    socket.off('connect', this.handleSocketConnect);
+    socket.off('disconnect', this.handleSocketDisconnect);
     const connection = navigator.connection as NetworkInformation | undefined;
     if (connection?.removeEventListener) {
       connection.removeEventListener('change', this.updateConnectionDetails);
-    }
-
-    if (this.connectivityCheckIntervalId) {
-      clearInterval(this.connectivityCheckIntervalId);
     }
   }
 }

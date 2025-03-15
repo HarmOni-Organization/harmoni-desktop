@@ -14,9 +14,9 @@ import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
 
-import { resolveHtmlPath } from '../util';
 import MenuBuilder from './menu';
 import store from './store';
+import { resolveHtmlPath } from '../util';
 
 class AppUpdater {
   constructor() {
@@ -89,7 +89,7 @@ export const createWindow = async () => {
   });
 
   mainWindow.on('closed', () => {
-    mainWindow = null;
+    // mainWindow = null;
   });
 
   ipcMain.on('electron-store-get', async (event: IpcMainEvent, key: string) => {
@@ -118,7 +118,7 @@ export const createWindow = async () => {
     shell.openExternal(edata.url);
     return { action: 'deny' };
   });
-
+  global.mainWindow = mainWindow;
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();

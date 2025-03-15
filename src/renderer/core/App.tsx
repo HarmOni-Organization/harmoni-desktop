@@ -1,8 +1,8 @@
-import { CustomPointer } from '../components/CustomPointer';
-import { Toaster } from '../components/Toaster';
-import { NavigationProvider } from '../contexts/NavigationContext';
-import Layout from '../layout';
-import ActiveTabRenderer from '../navigation/ActiveTabRenderer';
+import { CustomPointer } from '@components/CustomPointer';
+import { Toaster } from '@components/Toaster';
+import { NavigationProvider } from '@contexts/NavigationContext';
+import Layout from '@layout/index';
+import ActiveTabRenderer from '@navigation/ActiveTabRenderer';
 
 /**
  * Main application component that sets up context providers,

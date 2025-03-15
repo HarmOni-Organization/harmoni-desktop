@@ -1,5 +1,6 @@
+import { watchTogetherNavigation } from '@modules/watchTogether/navigation';
+
 import ItemPlaceholderIcon from '../assets/icons/ItemPlaceholderIcon';
-import { watchTogetherNavigation } from '../modules/watchTogether/navigation';
 
 /**
  * Configuration object defining the navigation items.
@@ -12,6 +13,7 @@ export const navigationConfig = {
     label: 'Section 1',
     icon: <ItemPlaceholderIcon />,
     persistent: false,
+    authRequired: true,
   },
   sectionTwo: {
     component: () => <div>Section 2 Content</div>,

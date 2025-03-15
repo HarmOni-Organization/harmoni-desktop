@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { createContext, useContext, useMemo, useState } from 'react';
 
-import { navigationConfig } from '../navigation';
+import { navigationConfig } from '@navigation/index';
 
 type NavigationContextType = {
   currentTab: string;

@@ -2,7 +2,8 @@ import './style.css';
 
 import clsx from 'classnames';
 
-import { appAsideClasses } from '../../appAsideClasses';
+import { appAsideClasses } from '@layout/AppAside/appAsideClasses';
+
 import GridIcon from './GridIcon';
 
 /**

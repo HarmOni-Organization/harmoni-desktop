@@ -1,14 +1,15 @@
 import './style.css';
 
+import React from 'react';
 import clsx from 'classnames';
 import { observer } from 'mobx-react-lite';
-import React from 'react';
 
-import preferencesStore from '../../../../core/stores/PreferencesStore';
-import useAppTheme from '../../../../hooks/useAppTheme';
-import { useThemeSlider } from '../../../../hooks/useThemeSlider';
-import { appThemeRemoveAll } from '../../../../utils/helper';
-import { appAsideClasses } from '../../appAsideClasses';
+import preferencesStore from '@core/stores/PreferencesStore';
+import useAppTheme from '@hooks/useAppTheme';
+import { useThemeSlider } from '@hooks/useThemeSlider';
+import { appAsideClasses } from '@layout/AppAside/appAsideClasses';
+import { appThemeRemoveAll } from '@utils/helper';
+
 import { GlobalThemeStyles } from './styles';
 import ThemeIcon from './ThemeIcon';
 

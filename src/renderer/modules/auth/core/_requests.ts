@@ -1,4 +1,5 @@
-import harmOniApi from '../../../services/harmOniApi';
+import harmOniApi from '@services/harmOniApi';
+
 import type {
   LoginResponse,
   RefreshTokenResponse,

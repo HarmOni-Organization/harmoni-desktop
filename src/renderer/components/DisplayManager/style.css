@@ -1,0 +1,52 @@
+.display-manager-container {
+  --transition-duration: var(--transition-duration);
+}
+/* Fade Transition */
+.fade-entering {
+  opacity: 1;
+  transition: opacity var(--transition-duration);
+}
+.fade-exiting {
+  opacity: 0;
+  transition: opacity var(--transition-duration);
+}
+
+/* Slide Transition */
+.slide-entering {
+  transform: translateX(0);
+  opacity: 1;
+  transition:
+    transform var(--transition-duration),
+    opacity var(--transition-duration);
+}
+.slide-exiting {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition:
+    transform var(--transition-duration),
+    opacity var(--transition-duration);
+}
+
+/* Zoom Transition */
+.zoom-entering {
+  transform: scale(1);
+  opacity: 1;
+  transition:
+    transform var(--transition-duration),
+    opacity var(--transition-duration);
+}
+.zoom-exiting {
+  transform: scale(0.8);
+  opacity: 0;
+  transition:
+    transform var(--transition-duration),
+    opacity var(--transition-duration);
+}
+
+/* Display Manager Container */
+.display-manager-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Prevent content from leaking during transitions */
+}

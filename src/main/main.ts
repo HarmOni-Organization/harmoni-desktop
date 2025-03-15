@@ -8,12 +8,11 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
-import './modules/ipc';
-
 import type { BrowserWindow } from 'electron';
 import { app } from 'electron';
 
-import { createWindow } from './modules/appWindow';
+import { createWindow } from './app/appWindow';
+import './app/ipc';
 
 const mainWindow: BrowserWindow | null = null;
 
@@ -31,6 +30,17 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
+
+app.on('ready', () => {
+  const originalConsoleError = console.error;
+
+  console.error = (message, ...args) => {
+    if (message.includes('color-mix is not a recognized system color')) {
+      return; // Ignore this specific error
+    }
+    originalConsoleError(message, ...args);
+  };
 });
 
 app

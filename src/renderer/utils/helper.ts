@@ -29,3 +29,25 @@ export const limitNumberWithinRange = (
   const parsed = parseInt(num as string, 10); // Using radix 10 to parse the number
   return Math.min(Math.max(Number.isNaN(parsed) ? min : parsed, min), max);
 };
+
+export const formatToDashCode = (
+  code: string,
+  segmentLength: number = 4,
+): string => {
+  // Remove any non-alphanumeric characters
+  const cleanCode: string = code.replace(/[^a-zA-Z0-9]/g, '');
+
+  // Validate that the code can be divided into equal segments
+  if (cleanCode.length % segmentLength !== 0) {
+    throw new Error(`Code length must be a multiple of ${segmentLength}.`);
+  }
+
+  // Split the code into segments of the specified length
+  const segments: string[] = [];
+  for (let i = 0; i < cleanCode.length; i += segmentLength) {
+    segments.push(cleanCode.slice(i, i + segmentLength));
+  }
+
+  // Join the segments with a dash
+  return segments.join('-');
+};

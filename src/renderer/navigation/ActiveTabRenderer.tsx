@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
 
-import { useNavigation } from '../contexts/NavigationContext';
+import { useNavigation } from '@contexts/NavigationContext';
+import authStore from '@modules/auth/core/store';
+
 import { navigationConfig } from '.';
 
 /**
@@ -11,10 +13,7 @@ import { navigationConfig } from '.';
  * @returns {React.ComponentType} The component linked with the active tab.
  */
 function ActiveTabRenderer() {
-  // Get the currently selected tab from the navigation context
   const { currentTab } = useNavigation();
-
-  // Memoize components to prevent unnecessary re-renders
   const memoizedTabComponents = useMemo(() => {
     const componentCache: Record<string, React.ComponentType> = {};
 
@@ -29,9 +28,18 @@ function ActiveTabRenderer() {
   return (
     <>
       {Object.keys(navigationConfig).map((tabId) => {
-        const { persistent } = navigationConfig[tabId];
+        const { persistent, authRequired } = navigationConfig[tabId];
         const MemoizedComponent = memoizedTabComponents[tabId];
         const isTabActive = tabId === currentTab;
+
+        // Check if the section requires authentication
+        if (authRequired && !authStore.isAuthenticated) {
+          return (
+            <div key={tabId} className="inactive-tab not-authorized-message">
+              <p>You need to log in to access this section.</p>
+            </div>
+          );
+        }
 
         // Render non-persistent components only if they are active
         if (!persistent && !isTabActive) {
@@ -41,7 +49,7 @@ function ActiveTabRenderer() {
         return (
           <div
             key={tabId}
-            className={isTabActive ? 'active-tab' : 'inactive-tab'}
+            className={`${isTabActive ? 'active-tab section-grid' : 'inactive-tab'}`}
           >
             <MemoizedComponent />
           </div>

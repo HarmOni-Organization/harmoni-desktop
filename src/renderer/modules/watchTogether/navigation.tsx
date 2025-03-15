@@ -1,5 +1,5 @@
 import WatchTogetherIcon from './assets/icons/WatchTogetherIcon';
-import WatchTogetherHome from './WatchTogetherHome';
+import WatchTogetherSection from './WatchTogetherSection';
 
 /**
  * Navigation configuration for the "Watch Together" feature.
@@ -7,7 +7,8 @@ import WatchTogetherHome from './WatchTogetherHome';
  */
 export const watchTogetherNavigation = {
   watchTogether: {
-    component: WatchTogetherHome,
+    component: WatchTogetherSection,
+    id: 'watch-together-section',
     label: 'Watch Together',
     icon: <WatchTogetherIcon />,
     persistent: true,
