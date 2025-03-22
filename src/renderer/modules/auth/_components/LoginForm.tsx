@@ -1,8 +1,9 @@
-import { observer } from 'mobx-react-lite';
 import { useMemo, useRef } from 'react';
+import { observer } from 'mobx-react-lite';
 
-import { Form, Input, SubmitButton } from '../../../components/CustomForm';
-import type { FormProps } from '../../../components/CustomForm/_components/Form';
+import { Form, Input, SubmitButton } from '@components/CustomForm';
+import type { FormProps } from '@components/CustomForm/_components/Form';
+
 import authStore from '../core/store';
 import { validateEmailOrUsername, validatePassword } from '../utils/validation';
 

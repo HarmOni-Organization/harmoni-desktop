@@ -1,0 +1,11 @@
+.room-id-section{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+
+  .room-id-value{
+    font-size: var(--font--size-semi-medium);
+    font-weight: bold;
+  }
+}

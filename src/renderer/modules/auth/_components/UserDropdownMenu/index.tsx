@@ -1,12 +1,12 @@
 import './style.scss';
 
-import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import profileAvatar from '../../assets/profile-avatar.png';
-import authStore from '../../core/store';
+import profileAvatar from '@modules/auth/assets/profile-avatar.png';
+import authStore from '@modules/auth/core/store';
 
 /**
  * UserDropdownMenu Component

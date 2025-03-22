@@ -1,0 +1,125 @@
+.command-input {
+  --input-width: 600px;
+  position: absolute;
+  left: calc(50% - var(--input-width) / 2);
+  padding-top: 5px;
+  z-index: 100;
+  opacity: 0;
+
+  transform: translateY(-100%); /* Initially hidden */
+  transition: transform 0.3s ease, opacity 0.3s ease;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0); /* Transition to its original position */
+  }
+
+  &.hidden {
+    opacity: 0;
+    transform: translateY(-100%); /* Slide back to the top */
+  }
+
+
+  .input-wrapper {
+    position: relative;
+    width: var(--input-width);
+    margin: 0 auto;
+  }
+
+  .input {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid var(--color--foreground--10);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+
+    color: var(--color--foreground--100);
+    background-color: var(--color--background--50);
+    backdrop-filter: blur(8px);
+
+    &::placeholder {
+      color: var(--color--foreground--50);
+    }
+
+    &:focus {
+      border-color: var(--color--mixed--info);
+      box-shadow: 0 2px 8px rgba(0, 122, 255, 0.2);
+      outline: none;
+    }
+
+    &.error {
+      border-color: var(--color--mixed--error);
+      box-shadow: 0 2px 8px rgba(255, 0, 0, 0.2);
+    }
+  }
+
+  .shadow-text {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    color: var(--color--foreground--50);
+    // color: #ccc;
+    font-size: 16px;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .suggestion-list {
+    position: absolute;
+    margin-top: 8px;
+    padding: 8px;
+    list-style: none;
+    max-height: 150px;
+    overflow-y: auto;
+
+    background-color: var(--color--foreground--10);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 var(--color--foreground--10);
+    border-radius: 8px;
+  }
+
+  .suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: none;
+    color: var(--color--foreground--100);
+
+    background-color: transparent;
+    display: block;
+    width: 100%;
+    text-align: start;
+
+    &.active {
+      background-color: var(--color--foreground--15);
+      border-radius: 8px;
+    }
+
+    .flag-required {
+      color: var(--color--mixed--error);
+      font-size: 12px;
+      margin-left: 8px;
+    }
+  }
+
+  .flag-info-container {
+    margin-top: 16px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+
+  .flag-info-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .flag-info-item {
+    margin-bottom: 4px;
+  }
+}

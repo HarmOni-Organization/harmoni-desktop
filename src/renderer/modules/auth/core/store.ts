@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import loadingStore from '../../../core/stores/LoadingStore';
-import { networkAwareAction } from '../../../utils/networkAwareAction';
+import loadingStore from '@core/stores/LoadingStore';
+import socketInstance from '@services/socketInstance';
+import { networkAwareAction } from '@utils/networkAwareAction';
+
 import type { AuthState, User } from './_models';
 import * as authApi from './_requests';
 
@@ -49,7 +51,10 @@ class AuthStore {
         this.authState.loggedIn = true;
       });
       await networkAwareAction(
-        () => this.validateSession(),
+        async () => {
+          await this.validateSession();
+          AuthStore.connectToWebSocket(); // Automatically connect to WebSocket
+        },
         () =>
           runInAction(() => {
             this.authState.sessionActive = false;
@@ -76,6 +81,8 @@ class AuthStore {
         this.authState.loggedIn = true;
         this.authState.sessionActive = true;
       });
+
+      AuthStore.connectToWebSocket(); // Connect to WebSocket after successful login
     } catch (loginError) {
       runInAction(() => {
         this.authState.authError =
@@ -207,11 +214,24 @@ class AuthStore {
   };
 
   /**
+   * Connects the user to the WebSocket server.
+   */
+  private static connectToWebSocket() {
+    try {
+      const socket = socketInstance.getInstance();
+      console.log('Connected to WebSocket server:', socket.id);
+    } catch (error) {
+      console.error('Failed to connect to WebSocket server:', error);
+    }
+  }
+
+  /**
    * Logs out the user and clears the session data.
    */
   logout = () => {
     window.electron.store.delete('auth.currentUser');
     this.resetAuthState();
+    socketInstance.disconnect(); // Disconnect from WebSocket on logout
   };
 
   /**
@@ -229,6 +249,10 @@ class AuthStore {
         emailCheckStatus: 'idle',
       };
     });
+  }
+
+  get isAuthenticated() {
+    return this.authState.loggedIn && this.authState.sessionActive;
   }
 
   /**

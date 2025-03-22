@@ -63,10 +63,26 @@ module.exports = {
     ], // Overrides Airbnb and enables restricted syntax
     'import/prefer-default-export': 'off', // Named export is easier to refactor
     'tailwindcss/no-custom-classname': 'off', // Disabled for easier use of custom Tailwind classes
-    'simple-import-sort/imports': 'error', // Enforce import sorting
+    // 'simple-import-sort/imports': 'error', // Enforce import sorting
     'simple-import-sort/exports': 'error', // Enforce export sorting
     'unused-imports/no-unused-imports': 'error', // Remove unused imports
     'unused-imports/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    'simple-import-sort/imports': [
+      'error',
+      {
+        groups: [
+          ['^.*\\.css$', '^.*\\.scss$'],
+
+          // First group: external libraries
+          ['^react', '^@?\\w'],
+          // Second group: absolute imports using your aliases (like @navigation)
+          ['^@.*'],
+          // Third group: relative imports
+          ['^\\./', '^../'],
+        ],
+      },
+    ],
+    // 'import/order': ['error', { 'newlines-between': 'always' }],
   },
   overrides: [
     {
@@ -85,12 +101,10 @@ module.exports = {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
         moduleDirectory: ['node_modules', 'src/'],
       },
-      webpack: {
-        config: require.resolve(
-          './.app-configs/configs/webpack.config.eslint.ts',
-        ),
+      typescript: {
+        alwaysTryTypes: true,
+        project: './tsconfig.json',
       },
-      typescript: {},
     },
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],

@@ -1,4 +1,4 @@
-import networkStore from '../core/stores/NetworkStore';
+import networkStore from '@core/stores/NetworkStore';
 
 export const networkAwareAction = async (
   action: () => Promise<void>, // The action to perform when online

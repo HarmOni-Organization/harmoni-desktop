@@ -1,8 +1,8 @@
 import type { InternalAxiosRequestConfig } from 'axios';
 import axios from 'axios';
 
-import { showToast } from '../components/Toaster';
-import appConfig from '../config/appConfig';
+import { showToast } from '@components/Toaster';
+import appConfig from '@config/appConfig';
 
 /**
  * Handles API errors by checking if the error is an AxiosError and throws
@@ -45,6 +45,7 @@ const harmOniApiClient = axios.create({
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
+    'Referrer-Policy': 'no-referrer',
   },
 });
 

@@ -1,6 +1,7 @@
 import { makeAutoObservable, reaction } from 'mobx';
 
-import THEME_MAP from '../../utils/constant/themeMap';
+import THEME_MAP from '@utils/constant/themeMap';
+
 import loadingStore from './LoadingStore';
 
 class PreferencesStore {

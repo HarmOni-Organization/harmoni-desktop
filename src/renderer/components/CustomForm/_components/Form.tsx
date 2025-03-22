@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle } from 'react';
 
-import type { FormFields } from '../hooks/useForm';
 import { FormProvider, useFormContext } from './FormProvider';
+import type { FormFields } from '../hooks/useForm';
 
 /**
  * @typedef {Object} FormProps

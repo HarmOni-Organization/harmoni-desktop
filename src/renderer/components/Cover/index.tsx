@@ -1,9 +1,9 @@
 import './style.css';
 
-import { observer } from 'mobx-react-lite';
 import { useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
 
-import loadingStore from '../../core/stores/LoadingStore';
+import loadingStore from '@core/stores/LoadingStore';
 
 const Cover = observer((): JSX.Element => {
   useEffect(() => {

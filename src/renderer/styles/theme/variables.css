@@ -9,8 +9,10 @@
   --font--size-huge: clamp(36px, 5.14vw, 5.14vw);
   --font--size-large: clamp(26px, 1.81vw, 1.81vw);
   --font--size-medium: 26px;
+  --font--size-semi-medium: 20px;
   --font--size-regular: 16px;
   --font--size-small: 14px;
+  --font--size-xxsmall: 10px;
   --font--size-regular-line-height: 1.25;
 }
 
@@ -46,4 +48,19 @@
 :root {
   --overflow-hidden: hidden;
   --overflow-auto: auto;
+}
+
+body {
+  --rt-color-white: color-mix(
+    in lab,
+    var(--color--background--100),
+    var(--color--foreground--100) 25%
+  );
+
+  --rt-color-dark: color-mix(
+    in lab,
+    var(--color--foreground--100),
+    var(--color--background--100) 25%
+  );
+  --rt-opacity: 1;
 }

@@ -1,14 +1,14 @@
 import type { IpcRendererEvent } from 'electron';
 import { contextBridge, ipcRenderer } from 'electron';
 
-export type Channels =
-  | 'ipc-example'
-  | 'electron-store-get'
-  | 'electron-store-set'
-  | 'electron-store-delete';
+export type Channels = string;
 
 const electronHandler = {
   ipcRenderer: {
+    ...ipcRenderer,
+
+    invoke: (channel, ...args) => ipcRenderer.invoke(channel, ...args),
+
     sendMessage(channel: Channels, ...args: unknown[]) {
       ipcRenderer.send(channel, ...args);
     },
@@ -24,6 +24,9 @@ const electronHandler = {
     once(channel: Channels, func: (...args: unknown[]) => void) {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
+    removeListener: (channel, callback) =>
+      ipcRenderer.removeListener(channel, callback),
+    removeAllListeners: (channel) => ipcRenderer.removeAllListeners(channel),
   },
   store: {
     get(key: string) {

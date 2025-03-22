@@ -1,10 +1,12 @@
 import { observer } from 'mobx-react-lite';
 
-import Breadcrumb from '../components/Breadcrumb';
-import Cover from '../components/Cover';
-import loadingStore from '../core/stores/LoadingStore';
-import useKeydownEvents from '../hooks/useKeydownEvents';
-import { UserAuthSection, UserDropdownMenu } from '../modules/auth';
+import Breadcrumb from '@components/Breadcrumb';
+import Cover from '@components/Cover';
+import CommandInput from '@core/commands/_components/CommandInput';
+import loadingStore from '@core/stores/LoadingStore';
+import useKeydownEvents from '@hooks/useKeydownEvents';
+import { UserAuthSection, UserDropdownMenu } from '@modules/auth';
+
 import { AppAside } from './AppAside';
 import GridOverlay from './GridOverlay';
 import { Header } from './Header';
@@ -40,6 +42,8 @@ function MainLayout({
             <section className="section" style={{ height: '100vh' }}>
               <NavigationMenu />
               <div className="content">
+                <CommandInput />
+
                 <Breadcrumb avatar={<UserDropdownMenu />} />
                 <div className="main">{children}</div>
               </div>

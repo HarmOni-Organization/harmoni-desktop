@@ -14,7 +14,11 @@
     "allowJs": true,
     "noImplicitAny": false,
     "outDir": ".app-configs/dll",
-    "typeRoots": ["./node_modules/@types"]
+    "typeRoots": ["./node_modules/@types"],
+    "baseUrl": "./src",
+    "paths": {
+      "@*": ["renderer/*"]
+    }
   },
   "include": [
     "src/**/*.ts",

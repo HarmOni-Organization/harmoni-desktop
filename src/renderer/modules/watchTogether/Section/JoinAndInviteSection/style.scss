@@ -1,0 +1,75 @@
+.join-invite-container {
+  grid-column: 4 / -4;
+  text-align: center;
+  margin-top: 40px;
+
+  h2 {
+    font-size: clamp(35px, 3.35vw, 6.35vw);
+  }
+
+  & > * {
+    margin-bottom: 18px;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 0;
+    border-radius: 40px;
+    font-size: var(--font--size-large);
+    cursor: pointer;
+    width: 100%;
+    -webkit-user-select: none;
+
+    &:active {
+      opacity: 80%;
+    }
+  }
+
+  .create-room-button {
+    background-color: var(--color--background--100);
+    color: var(--color--foreground--100);
+    border: 1px solid var(--color--foreground--50);
+  }
+
+  .join-room-button {
+    background-color: var(--color--foreground--100);
+    color: var(--color--background--100);
+    border: none;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+
+    .line {
+      border-bottom: 1px solid var(--color--foreground--33);
+      height: 2px;
+      flex: 1;
+    }
+
+    span {
+      margin: 0 10px;
+      color: var(--color--foreground--50);
+    }
+  }
+
+  .error-message {
+    color: red;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 1020px) {
+  .join-invite-container {
+    grid-column: 2 / -2;
+  }
+}
+
+@media (max-width: 760px) {
+  .join-invite-container {
+    grid-column: 1 / -1;
+  }
+}

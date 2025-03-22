@@ -1,0 +1,12 @@
+.joined-room-container {
+  .chat-header{
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .room-id-section{
+    margin-bottom: 10px;
+  }
+}
