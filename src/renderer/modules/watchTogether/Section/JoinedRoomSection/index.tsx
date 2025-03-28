@@ -1,10 +1,12 @@
 import './style.scss';
 
-import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 
 import { useDisplayManager } from '@components/DisplayManager/useDisplayManager';
-import { SECTION_NAMES } from '@modules/watchTogether/constants';
+import {
+  SECTION_NAMES,
+  WatchTogetherIDs,
+} from '@modules/watchTogether/constants';
 
 import CopyRoomId from './CopyRoomId';
 import LeaveRoomIcon from './LeaveRoomIcon';
@@ -19,11 +21,6 @@ import watchTogetherStore from '../../core/store/WatchTogetherStore';
  */
 function JoinedRoomSection() {
   const { navigate } = useDisplayManager();
-
-  console.log(
-    'watchTogetherStore.currentRoom:',
-    toJS(watchTogetherStore.currentRoom),
-  );
 
   const { currentRoom } = watchTogetherStore;
   if (!currentRoom) {
@@ -43,19 +40,32 @@ function JoinedRoomSection() {
   };
 
   return (
-    <div className="joined-room-container section-grid">
+    <div
+      className="joined-room-container section-grid"
+      id={WatchTogetherIDs.JOINED_ROOM_SECTION}
+    >
       <Sidebar />
       <div className="chat-container scroll-container">
         <div className="chat-header">
           <span className="chat-title">
             <h2>{roomInfo?.name || 'Unknown Room'}</h2>
-            <LeaveRoomIcon
-              width="30"
-              height="30"
-              fill="currentColor"
-              className="leave-room-icon"
+            <button
+              type="button"
+              style={{
+                background: 'transparent',
+                border: 'none',
+              }}
               onClick={handleLeaveRoom}
-            />
+              id={WatchTogetherIDs.LEAVE_BUTTON}
+            >
+              <LeaveRoomIcon
+                width="30"
+                height="30"
+                fill="currentColor"
+                className="leave-room-icon"
+                id={WatchTogetherIDs.LEAVE_BUTTON}
+              />
+            </button>
           </span>
           <CopyRoomId roomId={roomId} />
         </div>

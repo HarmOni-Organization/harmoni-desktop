@@ -20,6 +20,29 @@ export const VLC_EXECUTABLE_PATHS = [
   '/usr/local/bin/vlc',
   '/usr/local/bin/vlc-wrapper',
   '/snap/bin/vlc',
+  // Windows Store installation
+  'c:\\Program Files\\WindowsApps\\VideoLAN.VLC_*\\VLC\\vlc.exe',
+  // Additional macOS locations
+  '/opt/homebrew/bin/vlc',
+  '/opt/local/bin/vlc',
+  // Additional Linux locations
+  '/opt/vlc/bin/vlc',
+  '/var/lib/flatpak/app/org.videolan.VLC/current/active/files/bin/vlc',
+  '~/.local/bin/vlc',
+  '/usr/lib/vlc/vlc',
+  '/opt/homebrew/Caskroom/vlc/*/VLC.app/Contents/MacOS/VLC',
+  // More Windows locations
+  'c:\\Users\\*\\AppData\\Local\\Programs\\VideoLAN\\VLC\\vlc.exe',
+  'c:\\Users\\*\\Desktop\\VLC\\vlc.exe',
+  // More Linux locations
+  '/snap/vlc/current/usr/bin/vlc',
+  '/var/lib/snapd/snap/bin/vlc',
+  '/run/user/*/doc/*/VLC*.AppImage',
+  '/usr/share/vlc/vlc',
+  '/data/data/org.videolan.vlc/files/vlc',
+  // More macOS locations
+  '~/Applications/VLC.app/Contents/MacOS/VLC',
+  '/Volumes/*/VLC.app/Contents/MacOS/VLC',
 ];
 
 // Function to get the VLC Lua interface directory

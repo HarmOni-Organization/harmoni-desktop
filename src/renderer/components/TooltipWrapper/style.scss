@@ -10,8 +10,8 @@
 
 .tooltip-text {
   visibility: hidden;
-  width: auto; /* Let the width adjust based on content */
-  max-width: 200px; /* Limit the tooltip width */
+  width: auto;
+  max-width: 200px;
 
   background-color: var(--color--mixed--contrast);
   color: var(--color--mixed--blend);
@@ -25,29 +25,27 @@
   padding: 8px;
   position: absolute;
   z-index: 1;
-  white-space: normal; /* Allow multiline tooltip text */
-  word-wrap: break-word; /* Break long words inside tooltip */
+  white-space: normal;
+  word-wrap: break-word;
 
-  /* Position the tooltip above the text */
-  bottom: 100%; /* Position above */
+
+  bottom: 100%;
   left: 50%;
-  margin-left: -100px; /* Center the tooltip */
+  margin-left: -100px;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
-  pointer-events: none; /* Prevent tooltip from interfering with hover state */
+  pointer-events: none;
 }
 
-/* Show the tooltip when hovering the tooltip container */
 .tooltip-container:hover ~ .tooltip-text {
   visibility: visible;
   opacity: 1;
 }
 
-/* Optional: Tooltip arrow */
 .tooltip-text::after {
   content: '';
   position: absolute;
-  top: 100%; /* Position at the bottom of the tooltip */
+  top: 100%;
   left: 50%;
   margin-left: -5px;
   border-width: 5px;

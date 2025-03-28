@@ -1,3 +1,4 @@
+import { execSync } from 'child_process';
 import * as fs from 'fs';
 import path from 'path';
 import type { Logger } from 'shared/logger';
@@ -27,22 +28,9 @@ export class VLCPlayerController implements VideoPlayerController {
 
   private vlcProtocol: VLCProtocol;
 
-  private mediaFilePath?: string =
-    '/home/the-void/Desktop/HarmOni/apps/frontend/src/teeeee.mp4';
+  private mediaFilePath?: string = '';
 
   public isReady = false;
-
-  private playerState: IPlayerState = {
-    isPlaying: false,
-    currentTime: 0,
-    repeat: false,
-    loop: false,
-    title: '',
-    chapter: '',
-    filename: '',
-    duration: 0,
-    filepath: '',
-  };
 
   public commandHandler: VLCCommandHandler;
 
@@ -54,7 +42,7 @@ export class VLCPlayerController implements VideoPlayerController {
     private vlcHost: string,
     private vlcPortInput: number,
     private password: string,
-    private username: string,
+    private username?: string,
   ) {
     this.logger = initializeLogger('VLCPlayerController');
 
@@ -101,7 +89,6 @@ export class VLCPlayerController implements VideoPlayerController {
     } else {
       this.logger.info(`Lua script already exists at: ${VLC_LUA_DEST_PATH}`);
     }
-    console.log('aaaaaaaaaaaaaaaaaa');
 
     this.vlcPort = getRandomPort(VLC_PORT_RANGE.MIN, VLC_PORT_RANGE.MAX);
     this.vlcProtocol = new VLCProtocol(this.vlcPort);
@@ -165,7 +152,16 @@ export class VLCPlayerController implements VideoPlayerController {
 
   public async start(onReady?: (...args: unknown[]) => void): Promise<void> {
     await this.commandHandler.commandQueue.executeInQueue(async () => {
+      this.logger.info(
+        `Starting VLC with mediaFilePath: ${this.mediaFilePath}`,
+      );
       await this.processManager.startVLC(onReady);
+      if (this.mediaFilePath) {
+        this.logger.info(`Loading media file: ${this.mediaFilePath}`);
+        setTimeout(() => {
+          this.vlcProtocol.sendCommand(`load-file: ${this.mediaFilePath}`);
+        }, 1000);
+      }
     });
   }
 
@@ -252,6 +248,50 @@ export class VLCPlayerController implements VideoPlayerController {
         this.logger.info('Attempting to reconnect to VLC...');
         this.vlcProtocol.connect();
       }, 5000);
+    }
+  }
+
+  /**
+   * Validates if the provided path is a valid VLC player.
+   * @param {string} filePath - The file path to validate
+   * @returns {Promise<boolean>} Whether the path points to a valid VLC player
+   */
+  public async validatePlayerPath(filePath: string): Promise<boolean> {
+    try {
+      this.logger.info(`Validating VLC player path: ${filePath}`);
+
+      // Check if file exists
+      if (!fs.existsSync(filePath)) {
+        this.logger.error(`File does not exist: ${filePath}`);
+        return false;
+      }
+
+      // Check file name - if it contains "vlc" it's likely a VLC player
+      if (filePath.toLowerCase().includes('vlc')) {
+        return true;
+      }
+
+      // Try to execute with --version flag to check if it's VLC
+      try {
+        const result = execSync(`"${filePath}" --version`, {
+          timeout: 2000,
+        }).toString();
+        if (result.toLowerCase().includes('vlc')) {
+          this.logger.info('Successfully validated as VLC player');
+          return true;
+        }
+      } catch (execError) {
+        this.logger.error(
+          `Error validating VLC: ${(execError as Error).message}`,
+        );
+      }
+
+      return false;
+    } catch (error) {
+      this.logger.error(
+        `Error validating player path: ${(error as Error).message}`,
+      );
+      return false;
     }
   }
 }

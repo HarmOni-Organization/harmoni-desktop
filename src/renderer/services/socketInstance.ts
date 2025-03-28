@@ -7,33 +7,72 @@ import appConfig from '@config/appConfig';
 class SocketInstance {
   private static instances: Record<string, Socket | null> = {};
 
+  private static retryCount = 0;
+
   private static socketUrls: Record<string, string> = {
     default: appConfig.baseURL,
     watchTogether: `${appConfig.baseURL}/watch-together`,
   };
 
   /**
+   * Registers a new endpoint with the given key and URL
+   * @param endpointKey - The unique identifier for the endpoint
+   * @param url - The WebSocket URL for the endpoint
+   * @returns true if registration was successful, false if the key already exists
+   */
+  public static registerEndpoint(endpointKey: string, url: string): boolean {
+    if (this.socketUrls[endpointKey]) {
+      console.warn(
+        `Endpoint '${endpointKey}' already exists. Use a unique key.`,
+      );
+      return false;
+    }
+
+    this.socketUrls[endpointKey] = url;
+    return true;
+  }
+
+  /**
    * Gets or initializes the singleton WebSocket instance for a specific endpoint.
-   * @param endpointKey - The key of the endpoint (e.g., 'watchTogether').
+   * @param endpointKey - The key of the endpoint or a new endpoint key
+   * @param requireAuth - Whether authentication is required for this connection
+   * @param url - Optional URL for a new endpoint (if not already registered)
    */
   public static getInstance(
-    endpointKey: keyof typeof SocketInstance.socketUrls = 'default',
+    endpointKey: string = 'default',
+    requireAuth = false,
+    url?: string,
   ): Socket {
+    // Register a new endpoint if URL is provided and endpoint doesn't exist
+    if (url && !this.socketUrls[endpointKey]) {
+      this.registerEndpoint(endpointKey, url);
+    }
+
+    const token = SocketInstance.getToken();
+
+    if (requireAuth && !token) {
+      throw new Error('No token found. Cannot connect to socket.');
+    }
+
     if (!SocketInstance.instances[endpointKey]) {
       const socketUrl = SocketInstance.socketUrls[endpointKey];
       if (!socketUrl) {
         throw new Error(`Endpoint '${endpointKey}' is not defined.`);
       }
 
+      // Add connection name for better visibility in network monitor
       SocketInstance.instances[endpointKey] = io(socketUrl, {
-        extraHeaders: { Authorization: `Bearer ${SocketInstance.getToken()}` },
+        extraHeaders: token ? { Authorization: `Bearer ${token}` } : undefined,
+        // Add a custom query parameter to identify this connection in network tools
+        query: { connectionId: endpointKey },
+        forceNew: true, // Force a new connection to be established
         // reconnection: true,
         // reconnectionAttempts: 5,
         // reconnectionDelay: 1000,
       });
 
       // Setup event listeners for the specific instance
-      SocketInstance.setupListeners(endpointKey);
+      SocketInstance.setupListeners(endpointKey, requireAuth);
     }
 
     return SocketInstance.instances[endpointKey]!;
@@ -55,11 +94,10 @@ class SocketInstance {
   /**
    * Sets up WebSocket event listeners for a specific instance.
    * @param endpointKey - The key of the endpoint.
+   * @param requireAuth - Whether this instance requires authentication.
    */
-  private static setupListeners(
-    endpointKey: keyof typeof SocketInstance.socketUrls,
-  ) {
-    const socket = SocketInstance.getInstance(endpointKey);
+  private static setupListeners(endpointKey: string, requireAuth = false) {
+    const socket = SocketInstance.getInstance(endpointKey, requireAuth);
 
     socket.on('connect', () => {
       console.info(`WebSocket connected to '${endpointKey}':`, socket.id);
@@ -78,11 +116,25 @@ class SocketInstance {
       console.error(`WebSocket connection error on '${endpointKey}':`, error);
 
       if (error.message.includes('Unauthorized')) {
-        await SocketInstance.refreshToken();
-        socket.io.opts.extraHeaders = {
-          Authorization: `Bearer ${SocketInstance.getToken()}`,
-        };
-        socket.connect(); // Reconnect with the new token
+        if (SocketInstance.retryCount < 3) {
+          SocketInstance.retryCount += 1;
+
+          const newToken = await SocketInstance.refreshToken();
+
+          if (newToken) {
+            socket.io.opts.extraHeaders = {
+              Authorization: `Bearer ${newToken}`,
+            };
+            socket.connect(); // Reconnect with the new token
+          } else {
+            console.error('Failed to refresh token. Disconnecting...');
+            SocketInstance.disconnect(endpointKey, true);
+          }
+        } else {
+          console.error('Failed to refresh token. Disconnecting...');
+          SocketInstance.retryCount = 0;
+          SocketInstance.disconnect(endpointKey, true);
+        }
       }
     });
 
@@ -116,10 +168,13 @@ class SocketInstance {
           window.electron.store.set('auth.currentUser.token', newToken);
           console.info('Token refreshed successfully.');
         }
+        return newToken;
       }
+      return null;
     } catch (error) {
       console.error('Token refresh failed:', error);
       window.electron.store.set('auth.currentUser', null);
+      return null;
     }
   }
 
@@ -127,10 +182,7 @@ class SocketInstance {
    * Disconnects the WebSocket instance for a specific endpoint.
    * @param endpointKey - The key of the endpoint.
    */
-  public static disconnect(
-    endpointKey: keyof typeof SocketInstance.socketUrls,
-    isLogout = false,
-  ) {
+  public static disconnect(endpointKey: string, isLogout = false) {
     const socket = SocketInstance.instances[endpointKey];
 
     if (socket) {
@@ -158,11 +210,7 @@ class SocketInstance {
    * @param event - Event name.
    * @param data - Data payload for the event.
    */
-  public static emit(
-    endpointKey: keyof typeof SocketInstance.socketUrls,
-    event: string,
-    data?: unknown,
-  ) {
+  public static emit(endpointKey: string, event: string, data?: unknown) {
     SocketInstance.getInstance(endpointKey).emit(event, data);
   }
 
@@ -173,7 +221,7 @@ class SocketInstance {
    * @param callback - Callback function for the event.
    */
   public static on(
-    endpointKey: keyof typeof SocketInstance.socketUrls,
+    endpointKey: string,
     event: string,
     callback: (...args: unknown[]) => void,
   ) {
@@ -187,7 +235,7 @@ class SocketInstance {
    * @param callback - Optional callback function to remove.
    */
   public static off(
-    endpointKey: keyof typeof SocketInstance.socketUrls,
+    endpointKey: string,
     event: string,
     callback?: (...args: unknown[]) => void,
   ) {

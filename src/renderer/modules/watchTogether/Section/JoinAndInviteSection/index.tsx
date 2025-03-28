@@ -44,20 +44,18 @@ function JoinAndInviteSection() {
         value || codeInputRef.current?.getCode() || '',
       );
       await watchTogetherStore.joinRoom({ roomId });
-      navigate('JOINED_ROOM');
     } catch (err) {
       console.error('Error joining room:', err);
       showToast('Failed to join the room. Please check the Room ID.', 'error');
     }
   };
+  useEffect(() => {
+    if (watchTogetherStore.currentRoom?.roomId) {
+      navigate('JOINED_ROOM');
+    }
+  }, [watchTogetherStore.currentRoom?.roomId]);
 
   useEffect(() => {
-    console.log(
-      'watchTogetherStore.isInitialized',
-      watchTogetherStore.isInitialized,
-      watchTogetherStore.currentRoom,
-    );
-
     if (watchTogetherStore.isInitialized) {
       if (watchTogetherStore.currentRoom?.roomId) {
         navigate('JOINED_ROOM');
@@ -79,6 +77,7 @@ function JoinAndInviteSection() {
       <button
         type="button"
         className="create-room-button"
+        id={WatchTogetherIDs.CREATE_ROOM_BUTTON}
         onClick={handleCreateRoom}
       >
         Create a Room

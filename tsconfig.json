@@ -17,13 +17,7 @@
     "typeRoots": ["./node_modules/@types"],
     "baseUrl": "./src",
     "paths": {
-      "@*": ["renderer/*"],
-      "@main/*": ["main/*"],
-      "@renderer/*": ["renderer/*"],
-      "@modules/*": ["renderer/modules/*"],
-      "@components/*": ["renderer/components/*"],
-      "@assets/*": ["renderer/assets/*"],
-      "@utils/*": ["renderer/utils/*"]
+      "@*": ["renderer/*"]
     }
   },
   "include": [

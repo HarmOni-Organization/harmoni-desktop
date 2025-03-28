@@ -46,11 +46,6 @@ function ActiveTabRenderer() {
         const MemoizedComponent = memoizedTabComponents[tabId];
         const isTabActive = tabId === currentTab;
 
-        // Skip if we don't have a valid component
-        if (!MemoizedComponent) {
-          return null;
-        }
-
         // Check if the section requires authentication
         if (authRequired && !authStore.isAuthenticated) {
           return (

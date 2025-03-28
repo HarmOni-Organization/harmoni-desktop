@@ -29,7 +29,14 @@ export async function handleSyncState(
   const localTime = playerStatus.currentTime + diffTime;
   const serverTime = syncState.time + diffTime;
 
-  if (Math.abs(localTime - serverTime) > 1) {
+  // Only show sync message if the time difference is significant (more than 3 seconds)
+  const timeDiff = Math.abs(localTime - serverTime);
+  if (timeDiff > 1) {
     store.seek(serverTime);
+
+    // Show sync notification for significant changes
+    if (timeDiff > 3) {
+      store.displayMessage(`Syncing playback to match the room...`, 3);
+    }
   }
 }

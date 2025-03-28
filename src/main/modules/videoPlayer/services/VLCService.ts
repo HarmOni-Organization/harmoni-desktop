@@ -93,19 +93,20 @@ export const launchVLC = async ({
 
     await exec(command);
     AppLogger.info('VLC started successfully', { context: 'VLCManager' });
-  } catch (error) {
-    AppLogger.error(`Failed to start VLC: ${error.message}`, {
-      context: 'VLCManager',
-      transport: ['console'],
-    });
+  } catch (error: unknown) {
+    AppLogger.error(
+      `Failed to start VLC: ${error instanceof Error ? error.message : String(error)}`,
+      {
+        context: 'VLCManager',
+        transport: ['console'],
+      },
+    );
     throw error;
   }
 };
 
-export const closeVLC = (port) => {
+export const closeVLC = () => {
   try {
-    console.log(`port ${port}`);
-
     // Command to get the VLC process ID
     exec('pgrep vlc', (error, stdout, stderr) => {
       AppLogger.info(`stdout${stdout}`, {

@@ -4,6 +4,9 @@ export const WatchTogetherIDs = {
   JOIN_BUTTON: 'join-room-button',
   START_BUTTON: 'watchtogether-start-button',
   LEAVE_BUTTON: 'watchtogether-leave-button',
+  JOINED_ROOM_SECTION: 'joined-room-section',
+  ACTION_SECTION: 'watchtogether-action-section',
+  CREATE_ROOM_BUTTON: 'watchtogether-create-room-button',
 };
 
 export const SECTION_NAMES = {

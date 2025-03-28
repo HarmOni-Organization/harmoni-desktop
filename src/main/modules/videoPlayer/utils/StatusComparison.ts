@@ -40,7 +40,9 @@ export function identifyUserActions(
   if (oldState.filename !== newState.filename) {
     actions.push({
       event: USER_ACTIONS.FILE_UPDATE,
-      value: { filename: newState.filename },
+      value: {
+        filename: newState.filename === 'no-input' ? null : newState.filename,
+      },
     });
   }
 

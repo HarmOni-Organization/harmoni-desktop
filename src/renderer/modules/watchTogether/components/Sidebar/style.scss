@@ -6,7 +6,6 @@
   }
 
   .info-item {
-    // position: relative;
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
@@ -29,8 +28,8 @@
     max-width: 100%;
     white-space: nowrap;
     overflow: hidden;
-    direction: inherit; /* Inherit the text direction from the parent container */
-    text-align: inherit; /* Align text based on the inherited direction */
+    direction: inherit;
+    text-align: inherit;
     text-overflow: ellipsis;
   }
 
@@ -40,8 +39,8 @@
     max-width: 100%;
     white-space: nowrap;
     overflow: hidden;
-    direction: inherit; /* Inherit the text direction from the parent container */
-    text-align: inherit; /* Align text based on the inherited direction */
+    direction: inherit;
+    text-align: inherit;
     text-overflow: ellipsis;
   }
 
@@ -147,9 +146,8 @@
     background-color: var(--color--foreground--10);
     backdrop-filter: blur(8px);
     color: var(--color--foreground--100);
-    // box-shadow: 0 4px 6px var(--color--foreground--10);
     font-size: 16px;
-    appearance: none; /* Removes native dropdown arrow */
+    appearance: none;
     cursor: pointer;
     outline: none;
 
@@ -167,7 +165,7 @@
     top: 50%;
     right: 12px;
     transform: translateY(-50%);
-    pointer-events: none; /* Prevents interaction with the icon */
+    pointer-events: none;
     color: var(--color--foreground--100);
     font-size: 12px;
   }
@@ -184,10 +182,10 @@
   height: 12px;
   border-radius: 50%;
   border: 2px solid var(--color--background--100);
-  background-color: var(--color--mixed--error); // Default red for no file
+  background-color: var(--color--mixed--error);
 
   &.ready {
-    background-color: var(--color--mixed--green); // Green for has file
+    background-color: var(--color--mixed--green);
   }
 }
 .room-member-list {
@@ -257,14 +255,14 @@
   align-items: flex-start;
   gap: 10px;
   padding: 15px;
-  background-color: var(--color--background--100); // Use theme background
+  background-color: var(--color--background--100);
   border-radius: 10px;
-  box-shadow: 0 4px 8px var(--color--mixed--shadow); // Use shadow color
+  box-shadow: 0 4px 8px var(--color--mixed--shadow);
 
   .media-header {
     font-size: 16px;
     font-weight: 600;
-    color: var(--color--foreground--100); // Use theme foreground
+    color: var(--color--foreground--100);
     width: 100%;
     text-align: left;
   }
@@ -279,41 +277,60 @@
       padding: 10px 15px;
       font-size: 14px;
       font-weight: 500;
-      color: var(--color--background--100); // Button text color
-      background-color: var(--color--mixed--link); // Button background
+      color: var(--color--background--100);
+      background-color: var(--color--mixed--link);
       border: none;
       border-radius: 8px;
       cursor: pointer;
       transition: background-color 0.3s;
 
       &:hover {
-        background-color: var(--color--mixed--hover); // Hover effect
+        background-color: var(--color--mixed--hover);
       }
     }
 
     .selected-file {
       display: flex;
       flex-direction: column;
-      background-color: var(--color--background--100); // File background
+      background-color: var(--color--background--100);
       padding: 10px;
-      border: 1px solid var(--color--mixed--divider); // Divider color
+      border: 1px solid var(--color--mixed--divider);
       border-radius: 8px;
       word-wrap: break-word;
 
       span {
         font-size: 12px;
         font-weight: 600;
-        color: var(--color--foreground--75); // Slightly muted text color
+        color: var(--color--foreground--75);
       }
 
       p {
         font-size: 14px;
-        color: var(--color--foreground--100); // Main text color
+        color: var(--color--foreground--100);
         margin: 5px 0 0;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
     }
+  }
+}
+
+.select-player-btn {
+  padding: 4px 8px;
+  background-color: var(--color--foreground--10);
+  color: var(--color--foreground--100);
+  border: none;
+  border-radius: 6px;
+  font-size: var(--font--size-xsmall);
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: var(--color--foreground--20);
+  }
+
+  &:active {
+    background-color: var(--color--foreground--30);
   }
 }

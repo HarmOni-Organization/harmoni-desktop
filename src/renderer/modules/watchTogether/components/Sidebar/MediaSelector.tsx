@@ -28,7 +28,11 @@ function MediaSelector() {
           {watchTogetherStore.fileName}
         </Tooltip>
       </div>
-      <button className="select-file-button" onClick={handleSelectFile}>
+      <button
+        className="select-file-button"
+        onClick={handleSelectFile}
+        type="button"
+      >
         Select File
       </button>
     </div>

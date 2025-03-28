@@ -5,7 +5,7 @@ import { launchVLC } from './handlers/VLCProcessHandler';
 import type VLCProtocol from './VLCProtocol';
 
 /**
- * Manages the lifecycle of a VLC process for Syncplay.
+ * Manages the lifecycle of a VLC process.
  */
 export class VLCProcessManager {
   private vlcProtocol: VLCProtocol;

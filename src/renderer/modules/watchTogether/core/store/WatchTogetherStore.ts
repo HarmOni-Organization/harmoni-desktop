@@ -61,7 +61,7 @@ export class WatchTogetherStore {
         if (currentUser) {
           this.initialize();
         } else {
-          this.resetStore(); // Cleanup when user logs out
+          this.resetStore();
         }
       },
     );
@@ -97,7 +97,7 @@ export class WatchTogetherStore {
           roomId: window.electron.store.get('currentRoom.roomId'),
         });
 
-        // this.startSyncCheck();
+        this.startSyncCheck();
         console.log('WatchTogetherStore initialized');
       } else {
         console.log(
@@ -269,7 +269,7 @@ export class WatchTogetherStore {
   }
 
   get status(): string {
-    if (!this.fileName) return 'Idle';
+    if (!this.fileName || !this.isPlayerRunning()) return 'Idle';
     return this.currentRoom?.syncState.isPlaying ? 'Playing' : 'Paused';
   }
 
@@ -294,6 +294,22 @@ export class WatchTogetherStore {
       await window.electron.ipcRenderer.invoke('seek', timeInSeconds);
     } catch (error) {
       console.error('Error seeking:', error);
+    }
+  }
+
+  async displayMessage(message: string, duration = 5) {
+    try {
+      if (!this.isPlayerRunning()) {
+        console.warn('Cannot display message: Player is not running');
+        return;
+      }
+      await window.electron.ipcRenderer.invoke(
+        'display-message',
+        message,
+        duration,
+      );
+    } catch (error) {
+      console.error('Error displaying message:', error);
     }
   }
 

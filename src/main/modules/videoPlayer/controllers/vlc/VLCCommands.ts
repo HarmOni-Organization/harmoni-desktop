@@ -14,8 +14,14 @@ export class VLCCommandHandler {
 
   public commandQueue: AsyncLock;
 
-  public recentCommands: Map<string, { source: string; timestamp: number }> =
-    new Map();
+  // Stack of recent commands
+  public commandStack: Array<{
+    event: string;
+    source: string;
+  }> = [];
+
+  // Maximum size of the command stack
+  private readonly maxStackSize = 10;
 
   constructor(vlcProtocol: VLCProtocol, logger: Logger) {
     this.vlcProtocol = vlcProtocol;
@@ -24,12 +30,39 @@ export class VLCCommandHandler {
   }
 
   /**
-   * Logs executed commands for tracking purposes.
+   * Pushes a command to the command stack
    * @param {string} action - The action being logged.
    * @param {'app' | 'vlc'} source - The source of the command.
    */
-  private trackCommand(action: string, source: 'app' | 'vlc'): void {
-    this.recentCommands.set(action, { source, timestamp: Date.now() });
+  private pushCommand(action: string, source: 'app' | 'vlc'): void {
+    // Push to the stack (add to beginning)
+    this.commandStack.unshift({
+      event: action,
+      source,
+    });
+
+    // Trim the stack if it exceeds the maximum size
+    if (this.commandStack.length > this.maxStackSize) {
+      this.commandStack.pop();
+    }
+  }
+
+  /**
+   * Finds and removes a command from the stack
+   * @param {string} event - The event to look for and remove
+   * @returns The source of the command or undefined
+   */
+  public popCommandByEvent(event: string): string | undefined {
+    const index = this.commandStack.findIndex((cmd) => cmd.event === event);
+
+    if (index !== -1) {
+      const command = this.commandStack[index];
+      // Remove the item from the stack
+      this.commandStack.splice(index, 1);
+      return command.source;
+    }
+
+    return undefined;
   }
 
   /**
@@ -61,7 +94,7 @@ export class VLCCommandHandler {
 
         this.vlcProtocol.sendCommand(command);
         if (action) {
-          this.trackCommand(action, source);
+          this.pushCommand(action, source);
         }
       } catch (error) {
         this.logger.error(

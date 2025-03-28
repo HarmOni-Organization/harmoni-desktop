@@ -16,4 +16,6 @@ export interface VideoPlayerController {
   autoDetectPlayerPath(): Promise<string>;
   loadMedia(filePath: string): Promise<void>;
   checkPlayerRunning(): Promise<boolean>;
+  displayMessage(message: string, duration?: number): Promise<void> | void;
+  validatePlayerPath(path: string): Promise<boolean>;
 }

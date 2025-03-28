@@ -46,7 +46,6 @@ class VLCProtocol extends EventEmitter {
    * Establishes a connection to VLC.
    */
   public connect() {
-    console.log('VLC Port:', this.vlcPort);
     this.vlcSocket.connect(this.vlcPort, 'localhost');
   }
 

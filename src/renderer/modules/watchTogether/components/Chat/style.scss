@@ -8,17 +8,17 @@ $font-size-regular: 16px;
 
   display: flex;
   flex-direction: column;
-  border-radius: $border-radius-default; // Rounded corners
-  overflow: hidden; // Hide overflow outside the container
+  border-radius: $border-radius-default;
+  overflow: hidden;
   .ChatApp {
-    background-color: transparent; // Change the background color
-    border: 2px solid var(--color--foreground--10, #e0e0e0); // Add fallback
+    background-color: transparent;
+    border: 2px solid var(--color--foreground--10, #e0e0e0);
     border-radius: 12px;
     height: calc(100% - 80px);
   }
 
   .Chat-container {
-    overflow-y: auto; // Enable vertical scrolling
+    overflow-y: auto;
   }
 
   .chat-title {
@@ -51,7 +51,7 @@ $font-size-regular: 16px;
   .Composer {
     margin: 1rem 22px;
     padding: 0;
-    background-color: var(--color--foreground--5, #f0f0f0); // Add fallback
+    background-color: var(--color--foreground--5, #f0f0f0);
     border-radius: 12px;
   }
 
@@ -62,11 +62,11 @@ $font-size-regular: 16px;
 
   .Composer-input {
     background-color: transparent;
-    color: var(--color--foreground--100, #000); // Add fallback
+    color: var(--color--foreground--100, #000);
   }
 
   .Composer-input::placeholder {
-    color: var(--color--foreground--50, #888); // Add fallback
+    color: var(--color--foreground--50, #888);
   }
 
   .Composer-actions {
@@ -74,17 +74,17 @@ $font-size-regular: 16px;
   }
 
   .Composer-sendBtn {
-    background: var(--color--foreground--50, #999); // Add fallback
-    color: var(--color--background--100, #fff); // Add fallback
+    background: var(--color--foreground--50, #999);
+    color: var(--color--background--100, #fff);
 
     &:hover {
-      background: var(--color--foreground--100, #333) !important; // Add fallback
+      background: var(--color--foreground--100, #333) !important;
     }
 
     border-radius: 12px;
     padding: 0.5rem 2rem;
     margin-left: 1rem;
-    font-size: var(--font--size-regular, 16px); // Add fallback
+    font-size: var(--font--size-regular, 16px);
     margin-right: 16px;
     margin-bottom: 13px;
   }
@@ -103,16 +103,16 @@ $font-size-regular: 16px;
 
   .Message {
     &.left .Bubble {
-      background-color: var(--color--foreground--10, #e0e0e0); // Add fallback
-      color: var(--color--foreground--100, #000); // Add fallback
+      background-color: var(--color--foreground--10, #e0e0e0);
+      color: var(--color--foreground--100, #000);
       margin-right: 10rem;
       border-radius: 22px;
       border-bottom-left-radius: 0;
     }
 
     &.right .Bubble {
-      background-color: var(--color--foreground--100, #333); // Add fallback
-      color: var(--color--background--100, #fff); // Add fallback
+      background-color: var(--color--foreground--100, #333);
+      color: var(--color--background--100, #fff);
       margin-left: 10rem;
       border-radius: 20px;
       border-bottom-right-radius: 0;
@@ -141,12 +141,12 @@ $font-size-regular: 16px;
   }
 
   .Message-author {
-    color: var(--color--foreground--50, #888); // Add fallback
+    color: var(--color--foreground--50, #888);
     margin: 5px 5px 5px 15px;
 
     .Message-author--data {
       content: var(--_time-author-content);
-      color: var(--color--foreground--33, #555); // Add fallback
+      color: var(--color--foreground--33, #555);
       margin-left: 5px;
     }
   }
@@ -192,8 +192,8 @@ $font-size-regular: 16px;
   background-color: var(--color--background--100);
   opacity: 0.33;
   mix-blend-mode: multiply;
-  pointer-events: none; /* Ensure overlay doesn't block interaction */
-  border-radius: 50%; /* Ensures the overlay fits the circle shape */
+  pointer-events: none;
+  border-radius: 50%;
 }
 
 /* Second overlay effect (similar to .image-overlay-02) */
@@ -206,8 +206,8 @@ $font-size-regular: 16px;
   height: 100%;
   background-color: var(--color--foreground--100);
   mix-blend-mode: lighten;
-  pointer-events: none; /* Ensure overlay doesn't block interaction */
-  border-radius: 50%; /* Ensures the overlay fits the circle shape */
+  pointer-events: none;
+  border-radius: 50%;
 }
 
 /* Adjusting styles based on themes (use these if needed) */
@@ -264,8 +264,8 @@ body.theme--00 .Avatar::after {
 
 /* Change text selection color */
 ::selection {
-  background-color: #fae49d; /* Your desired highlight background color */
-  color: #000000; /* Your desired text color when highlighted */
+  background-color: #fae49d;
+  color: #000000;
 }
 
 ::-webkit-selection {

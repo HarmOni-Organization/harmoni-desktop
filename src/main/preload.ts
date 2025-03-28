@@ -2,14 +2,6 @@ import type { IpcRendererEvent } from 'electron';
 import { contextBridge, ipcRenderer } from 'electron';
 
 export type Channels = string;
-// | 'ipc-example'
-// | 'electron-store-get'
-// | 'electron-store-set'
-// | 'electron-store-delete'
-// | 'status-update'
-// | 'state-change'
-// | 'player-close'
-// | 'vlc-state-change';
 
 const electronHandler = {
   ipcRenderer: {

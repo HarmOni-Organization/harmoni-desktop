@@ -1,5 +1,6 @@
 import { dialog, ipcMain } from 'electron';
 import os from 'os';
+import path from 'path';
 import { AppLogger } from 'shared/logger';
 
 import type { PlayerOptions, PlayerType } from './controllers/PlayerFactory';
@@ -162,7 +163,7 @@ ipcMain.handle('seek', async (event, timeInSeconds: number) => {
 /**
  * Opens a file picker to select a media player executable.
  */
-ipcMain.handle('select-player', async () => {
+ipcMain.handle('select-player', async (_, initialPath?: string) => {
   try {
     const platform = os.platform();
     const extensions: string[] = [];
@@ -176,9 +177,27 @@ ipcMain.handle('select-player', async () => {
       default:
     }
 
+    // Get default directory from initialPath if available
+    let defaultPath: string | undefined;
+    if (initialPath && initialPath.trim() !== '') {
+      try {
+        // Use the directory of the initialPath
+        defaultPath = path.dirname(initialPath);
+        AppLogger.info(`Using initial directory: ${defaultPath}`, {
+          context: 'IPC',
+        });
+      } catch (error) {
+        AppLogger.warn(
+          `Could not use initialPath: ${(error as Error).message}`,
+          { context: 'IPC' },
+        );
+      }
+    }
+
     const result = await dialog.showOpenDialog(global.mainWindow, {
       properties: ['openFile'],
       filters: [{ name: 'Executables', extensions }],
+      defaultPath,
     });
 
     if (result.canceled) {
@@ -264,5 +283,47 @@ ipcMain.handle('load-media-file', async (event, filePath: string) => {
       context: 'IPC',
     });
     return { success: false, error: (error as Error).message };
+  }
+});
+
+/**
+ * Displays a message on the VLC player's on-screen display.
+ */
+ipcMain.handle(
+  'display-message',
+  async (event, message: string, duration = 5) => {
+    try {
+      AppLogger.info(`Displaying message on VLC: ${message}`, {
+        context: 'IPC',
+      });
+      await videoPlayerManager.displayMessage(message, duration);
+      return { success: true };
+    } catch (error) {
+      AppLogger.error(`Error displaying message: ${(error as Error).message}`, {
+        context: 'IPC',
+      });
+      return { success: false, error: (error as Error).message };
+    }
+  },
+);
+
+/**
+ * Validates if the provided path is a valid video player.
+ * Currently supports VLC player validation.
+ */
+ipcMain.handle('validate-player-path', async (_, filePath: string) => {
+  try {
+    AppLogger.info(`Validating player path: ${filePath}`, {
+      context: 'IPC',
+    });
+
+    // Use the VideoPlayerManager to validate the player path
+    return await videoPlayerManager.validatePlayerPath(filePath);
+  } catch (error) {
+    AppLogger.error(
+      `Error validating player path: ${(error as Error).message}`,
+      { context: 'IPC' },
+    );
+    return false;
   }
 });

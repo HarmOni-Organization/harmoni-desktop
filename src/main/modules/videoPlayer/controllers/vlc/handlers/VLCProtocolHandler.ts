@@ -45,15 +45,15 @@ export const monitorPlayerStatus = async (
           );
 
           let actionSource = 'vlc';
+
           for (const action of detectedActions) {
-            const recentCommand = controller.commandHandler.recentCommands.get(
+            // Pop the command from the stack if it exists
+            const commandSource = controller.commandHandler.popCommandByEvent(
               action.event,
             );
-            if (
-              recentCommand &&
-              Date.now() - recentCommand.timestamp < pollingInterval
-            ) {
-              actionSource = recentCommand.source;
+
+            if (commandSource) {
+              actionSource = commandSource;
               break;
             }
           }

@@ -33,7 +33,7 @@
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "prestart": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.app-configs/configs/webpack.config.main.dev.ts",
     "start": "ts-node ./.app-configs/scripts/check-port-in-use.js && npm run prestart && npm run start:renderer",
-    "start2": "PORT='2712' STORE_INSTANCE_NAME='test' yarn start",
+    "start:test-instance": "PORT='2712' STORE_INSTANCE_NAME='test' yarn start",
     "start:main": "concurrently -k \"cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --watch --config ./.app-configs/configs/webpack.config.main.dev.ts\" \"electronmon -r ts-node/register/transpile-only -r tsconfig-paths/register .\"",
     "start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.app-configs/configs/webpack.config.preload.dev.ts",
     "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.app-configs/configs/webpack.config.renderer.dev.ts",
@@ -89,9 +89,6 @@
   "dependencies": {
     "@chatui/core": "^2.4.2",
     "@electron/notarize": "^2.3.2",
-    "@tanstack/react-table": "^8.20.5",
-    "@use-gesture/react": "^10.3.1",
-    "async-mutex": "^0.5.0",
     "axios": "^1.8.1",
     "classnames": "^2.5.1",
     "electron-debug": "^3.2.0",
@@ -107,7 +104,6 @@
     "react-router-dom": "^6.16.0",
     "react-toastify": "^10.0.6",
     "react-tooltip": "^5.28.0",
-    "react-transition-group": "^4.4.5",
     "socket.io-client": "^4.8.1",
     "styled-components": "^6.1.13"
   },

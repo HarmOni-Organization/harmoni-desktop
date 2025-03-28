@@ -58,7 +58,7 @@ export interface Room {
 export interface RoomUpdate {
   roomId: string;
   roomUpdates: Partial<Room>;
-  metadata: { action: string; userId: string };
+  metadata: { action: string; userId: string; username?: string };
 }
 
 export const SyncActions = {

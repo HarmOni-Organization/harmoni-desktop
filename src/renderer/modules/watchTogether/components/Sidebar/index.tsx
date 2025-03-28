@@ -8,6 +8,7 @@ import { observer } from 'mobx-react-lite';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import profileAvatar from '@modules/auth/assets/profile-avatar.png';
+import { WatchTogetherIDs } from '@modules/watchTogether/constants';
 import watchTogetherStore from '@modules/watchTogether/core/store/WatchTogetherStore';
 import type { PlayerType } from '@modules/watchTogether/types';
 
@@ -38,12 +39,6 @@ const RoomMemberList = observer(() => {
 
             <div className="member-info">
               <span className="username">{member.username}</span>
-
-              {/* <span
-                className={`file-status ${hasFile ? 'ready' : 'not-Ready'}`}
-              >
-                {hasFile ? 'Not Ready' : 'Ready'}
-              </span> */}
             </div>
           </div>
         );
@@ -61,9 +56,25 @@ function Sidebar() {
   // Opens a file dialog to select a video player
   const handleSelectPlayer = async () => {
     try {
-      const path = await window.electron.ipcRenderer.invoke('select-player');
+      // Pass the current player path to use as initial directory
+      const path = await window.electron.ipcRenderer.invoke(
+        'select-player',
+        videoPlayer.path,
+      );
       if (path) {
-        setPlayerPath(path); // Update player path in the store
+        // Validate the selected player before setting it
+        const isValid = await window.electron.ipcRenderer.invoke(
+          'validate-player-path',
+          path,
+        );
+        if (isValid) {
+          setPlayerPath(path); // Update player path in the store
+        } else {
+          console.error('Invalid player path selected');
+          alert(
+            'The selected file is not a valid video player. Please select VLC or another supported player.',
+          );
+        }
       }
     } catch (error) {
       console.error('Failed to select player:', error);
@@ -102,9 +113,6 @@ function Sidebar() {
       const selectedFile: string | null =
         await window.electron.ipcRenderer.invoke('select-media');
       if (selectedFile) {
-        console.log('selectedFile', selectedFile);
-        console.log('watchTogetherStore', toJS(watchTogetherStore.currentRoom));
-
         watchTogetherStore.setSelectedMedia(selectedFile); // Set the selected file path in the store
       }
     } catch (error) {
@@ -112,7 +120,10 @@ function Sidebar() {
     }
   };
   return (
-    <div className="action-section-container">
+    <div
+      className="action-section-container"
+      id={WatchTogetherIDs.ACTION_SECTION}
+    >
       <button
         type="button"
         className="harmony-btn"
@@ -123,6 +134,7 @@ function Sidebar() {
             console.error('Failed to start:', error);
           }
         }}
+        id={WatchTogetherIDs.START_BUTTON}
       >
         Harm
         <span className="icon">
@@ -155,12 +167,6 @@ function Sidebar() {
             width={20}
             style={{ minWidth: 20, paddingBottom: 10, cursor: 'pointer' }}
           />
-          {/* <span>
-            <CopyIcon
-              className="select-file-button"
-              onClick={handleSelectFile}
-            />
-          </span> */}
         </div>
         {/* <MediaSelector /> */}
         <div className="info-item">
@@ -183,16 +189,17 @@ function Sidebar() {
           <Tooltip anchorSelect=".player-path" place="top">
             {videoPlayer.path}
           </Tooltip>
+          <button
+            type="button"
+            className="select-player-btn"
+            onClick={handleSelectPlayer}
+            title="Select player path"
+          >
+            Select
+          </button>
         </div>
       </div>
       <RoomMemberList />
-      {/* <div className="main-info">
-        <div>
-          <div className="Image avatar">
-            <img src={profileAvatar} alt="User Profile Avatar" />
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 }

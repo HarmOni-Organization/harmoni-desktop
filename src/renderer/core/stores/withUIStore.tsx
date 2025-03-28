@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { forwardRef, useCallback, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 
@@ -15,7 +16,7 @@ export const withUIStore = <P extends object>(
   const UIStoreInputWrapper = forwardRef<
     HTMLDivElement,
     Omit<P, 'onChange' | 'value'> & WithUIStoreProps
-  >(({ id, onChange, defaultValue = '', ...props }, ref) => {
+  >(({ id, onChange, defaultValue = '', ...props }: any, ref) => {
     // Ensure value is always controlled
     const value = uiStore.getInputValue<string>(id) ?? defaultValue ?? '';
 
@@ -49,7 +50,10 @@ export const withUIStore = <P extends object>(
     );
   });
 
-  return observer(UIStoreInputWrapper);
+  // Using type assertion to tell TypeScript that observer(UIStoreInputWrapper) is compatible
+  return observer(UIStoreInputWrapper) as unknown as React.FC<
+    Omit<P, 'onChange' | 'value'> & WithUIStoreProps
+  >;
 };
 
 export default withUIStore;

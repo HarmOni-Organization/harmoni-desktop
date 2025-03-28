@@ -19,7 +19,6 @@ export function setupIpcListeners(store: WatchTogetherStore) {
         hash: '',
       },
     });
-    console.log('player-close');
   });
 
   window.electron.ipcRenderer.on('player-details', (...args: unknown[]) => {
@@ -37,7 +36,6 @@ export function setupIpcListeners(store: WatchTogetherStore) {
       }[],
       string,
     ];
-
     if (source === 'app') {
       return;
     }
@@ -59,11 +57,16 @@ export function setupIpcListeners(store: WatchTogetherStore) {
           action: SyncActions.SEEK,
           value: currentTime,
         });
+        store.displayMessage(
+          `You Jumped to ${changes[0].value.currentTime?.toFixed(2)}`,
+          3,
+        );
       } else if (event === USER_ACTIONS.PLAY) {
         store.socket?.emit('updateSyncState', {
           roomId,
           action: SyncActions.PLAY,
         });
+        store.displayMessage(`You Played the video`, 3);
       } else if (
         event === USER_ACTIONS.PAUSE &&
         syncState?.isPlaying !== isPlaying
@@ -72,9 +75,9 @@ export function setupIpcListeners(store: WatchTogetherStore) {
           roomId,
           action: SyncActions.PAUSE,
         });
+        store.displayMessage(`You Paused the video`, 3);
       } else if (event === USER_ACTIONS.FILE_UPDATE) {
-        console.log('change', change);
-
+        store.displayMessage(`File updated`, 3);
         store.socket?.emit('updateFileInfo', {
           roomId,
           fileInfo: {
@@ -84,16 +87,17 @@ export function setupIpcListeners(store: WatchTogetherStore) {
             hash: filename,
           },
         });
-        // this.seek(this.currentRoom.syncState.time);
-        // this.socket?.emit('updateSyncState', {
-        //   roomId,
-        //   action: SyncActions.PAUSE,
-        // });
-        // this.socket?.emit('updateSyncState', {
-        //   roomId,
-        //   action: SyncActions.SEEK,
-        //   value: this.currentRoom.syncState.time,
-        // });
+        if (filename) {
+          if (syncState?.isPlaying) {
+            store.play();
+          } else {
+            store.pause();
+          }
+
+          if (syncState?.time) {
+            store.seek(syncState?.time || 0);
+          }
+        }
       }
     });
   });

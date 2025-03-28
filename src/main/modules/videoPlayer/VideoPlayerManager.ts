@@ -80,4 +80,21 @@ export class VideoPlayerManager {
     const player = this.ensurePlayerSelected();
     return player.autoDetectPlayerPath();
   }
+
+  async displayMessage(message: string, duration = 5): Promise<void> {
+    const player = this.ensurePlayerSelected();
+    await player.displayMessage(message, duration);
+  }
+
+  /**
+   * Validates if the provided path is a valid player executable.
+   * @param filePath - The file path to validate
+   * @returns {Promise<boolean>} Whether the path points to a valid player
+   */
+  async validatePlayerPath(filePath: string): Promise<boolean> {
+    if (!this.currentPlayer) {
+      throw new Error('No player selected for validation');
+    }
+    return this.currentPlayer.validatePlayerPath(filePath);
+  }
 }
