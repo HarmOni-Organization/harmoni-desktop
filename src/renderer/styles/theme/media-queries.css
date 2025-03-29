@@ -24,6 +24,10 @@
     grid-column: 1 / -1;
   }
 
+  .section:has(.app-nav.collapsed) > .content {
+    grid-column: 1 / -1;
+  }
+
   .section > .content:has(.main) {
     padding-top: 56px;
   }

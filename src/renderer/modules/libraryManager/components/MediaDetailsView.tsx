@@ -77,14 +77,14 @@ function MediaDetailsView({
             <line x1="19" y1="12" x2="5" y2="12" />
             <polyline points="12 19 5 12 12 5" />
           </svg>
-          Back to Folders
+          Back to Collection
         </button>
         <h2 className="folder-title">{folder.name}</h2>
       </div>
 
       <div className="media-details-content">
         <div className="folder-files">
-          <h3 className="subsection-title">Files in this folder</h3>
+          <h3 className="subsection-title">Media in this collection</h3>
           <div className="media-list">
             {folder.files.map((media) => (
               <div

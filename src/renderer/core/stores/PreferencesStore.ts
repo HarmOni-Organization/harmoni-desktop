@@ -9,11 +9,17 @@ class PreferencesStore {
 
   language: string;
 
+  sidebarCollapsed: boolean;
+
   constructor() {
     this.theme =
       (window.electron.store.get('userPreferences.theme') as number) || 0;
     this.language =
       (window.electron.store.get('userPreferences.language') as string) || 'en';
+    this.sidebarCollapsed =
+      (window.electron.store.get(
+        'userPreferences.sidebarCollapsed',
+      ) as boolean) || false;
     makeAutoObservable(this);
 
     this.init();
@@ -24,6 +30,9 @@ class PreferencesStore {
     );
     this.observeChanges('language', (newLanguage) =>
       window.electron.store.set('userPreferences.language', newLanguage),
+    );
+    this.observeChanges('sidebarCollapsed', (newValue) =>
+      window.electron.store.set('userPreferences.sidebarCollapsed', newValue),
     );
   }
 
@@ -82,6 +91,21 @@ class PreferencesStore {
   get currentTheme(): string {
     return THEME_MAP[this.theme];
   }
+
+  /**
+   * Toggles the sidebar collapsed state
+   */
+  toggleSidebar = () => {
+    this.sidebarCollapsed = !this.sidebarCollapsed;
+  };
+
+  /**
+   * Sets the sidebar collapsed state
+   * @param collapsed - The new collapsed state
+   */
+  setSidebarCollapsed = (collapsed: boolean) => {
+    this.sidebarCollapsed = collapsed;
+  };
 }
 
 // Register PreferencesStore in LoadingStore

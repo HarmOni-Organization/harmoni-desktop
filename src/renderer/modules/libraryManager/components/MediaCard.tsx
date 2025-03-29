@@ -17,8 +17,8 @@ function MediaCard({ item, onPlay, onWatchStatusUpdate }: MediaCardProps) {
   const resolution = item?.resolution || 'Unknown';
   const genres = item?.metadata?.genres || [];
 
-  // Safely extract folder name from path
-  const folderName = item?.path ? item.path.split('/').slice(-2, -1)[0] : '';
+  // Get collection name if available
+  const collectionName = item?.collectionName || '';
 
   // Format file size to human-readable format
   const formatFileSize = (bytes: number): string => {
@@ -50,24 +50,22 @@ function MediaCard({ item, onPlay, onWatchStatusUpdate }: MediaCardProps) {
     onWatchStatusUpdate(!item?.watched);
   };
 
-  // Determine content type based on folder name or metadata
+  // Determine content type based on collection or metadata
   const getContentType = (): string => {
-    if (!folderName) return '';
+    if (item?.contentType) return item.contentType;
 
-    const folderLower = folderName.toLowerCase();
-    if (folderLower.includes('anime') || item?.metadata?.anilistId) {
+    if (item?.metadata?.anilistId) {
       return 'Anime';
     }
-    if (
-      folderLower.includes('tv') ||
-      folderLower.includes('series') ||
-      folderLower.includes('show')
-    ) {
+
+    if (item?.metadata?.isSeries) {
       return 'TV Show';
     }
-    if (folderLower.includes('movie') || folderLower.includes('film')) {
+
+    if (item?.metadata?.isMovie) {
       return 'Movie';
     }
+
     return '';
   };
 
@@ -130,7 +128,7 @@ function MediaCard({ item, onPlay, onWatchStatusUpdate }: MediaCardProps) {
             }}
           >
             <span>{title.substring(0, 1).toUpperCase()}</span>
-            {folderName && <small className="folder-name">{folderName}</small>}
+            {collectionName && <small className="collection-name">{collectionName}</small>}
           </div>
         )}
         <div className="media-card-overlay">
@@ -152,9 +150,9 @@ function MediaCard({ item, onPlay, onWatchStatusUpdate }: MediaCardProps) {
                 ))}
               </div>
             )}
-            {folderName && (
-              <div className="media-card-folder">
-                <span title={folderName}>{folderName}</span>
+            {collectionName && (
+              <div className="media-card-collection">
+                <span title={collectionName}>{collectionName}</span>
               </div>
             )}
           </div>

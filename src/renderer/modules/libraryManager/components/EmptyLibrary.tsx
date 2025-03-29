@@ -26,17 +26,17 @@ function EmptyLibrary({ onAddFolder }: EmptyLibraryProps) {
       </div>
       <h2 className="empty-library-title">Your Library is Empty</h2>
       <p className="empty-library-description">
-        Add a folder containing your anime, TV shows, or movies to get started.
+        Create a collection for your anime, TV shows, or movies to get started.
         HarmOni will scan your files and organize them automatically based on
-        folder structure.
+        your collection settings.
       </p>
       <div className="empty-library-tips">
         <h3>Tips for best results:</h3>
         <ul>
           <li>
-            Organize your media into folders by type (Anime, TV Shows, Movies)
+            Create separate collections by media type (Anime, TV Shows, Movies)
           </li>
-          <li>Use season folders for TV shows (e.g., Season 1, Season 2)</li>
+          <li>Organize your media into folders by season for TV shows</li>
           <li>Keep episode files in their respective season folders</li>
           <li>Use standard naming conventions (ShowName.S01E01.mp4)</li>
         </ul>
@@ -45,9 +45,9 @@ function EmptyLibrary({ onAddFolder }: EmptyLibraryProps) {
         className="btn btn-primary"
         onClick={onAddFolder}
         type="button"
-        aria-label="Add folder to library"
+        aria-label="Create new collection"
       >
-        Add Folder
+        Create Collection
       </button>
     </div>
   );

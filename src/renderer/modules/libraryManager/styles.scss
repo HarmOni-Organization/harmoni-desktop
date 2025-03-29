@@ -1,4 +1,6 @@
 .library-container {
+  grid-column: 1 / -1;
+
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -562,6 +564,8 @@
 }
 
 .empty-library {
+  grid-column: 1 / -1;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -669,6 +673,7 @@
 
 // Folder View Styles
 .folder-view {
+  grid-column: 1 / -1;
   padding: 20px;
 
   .section-title {

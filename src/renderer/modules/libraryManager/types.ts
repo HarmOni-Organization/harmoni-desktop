@@ -2,14 +2,15 @@ export interface MediaFile {
   id: string;
   name: string;
   path: string;
-  type: 'video';
-  format: string; // mp4, mkv, avi, etc.
+  type: 'video' | 'audio' | 'image';
+  format: string; // mp4, mkv, avi, mp3, etc.
   size: number; // in bytes
   lastModified: number; // timestamp
   duration?: number; // in seconds
   resolution?: string; // e.g., "1080p"
   watched: boolean;
   watchProgress?: number; // in seconds
+  contentType?: 'movie' | 'tvshow' | 'anime' | 'music';
 }
 
 export interface MediaMetadata {
@@ -22,6 +23,8 @@ export interface MediaMetadata {
   rating?: number;
   releaseDate?: string;
   studio?: string;
+  director?: string;
+  cast?: string[];
   season?: number;
   episode?: number;
   totalEpisodes?: number;
@@ -29,6 +32,12 @@ export interface MediaMetadata {
   anilistId?: number;
   malId?: number;
   tmdbId?: number;
+  imdbId?: string;
+  musicBrainzId?: string;
+  tvmazeId?: number;
+  artist?: string;
+  album?: string;
+  trailer?: string;
 }
 
 export interface MediaItem extends MediaFile {
@@ -80,4 +89,40 @@ export interface ScanProgress {
   totalFiles?: number;
   processedFiles?: number;
   error?: string;
+}
+
+export interface Collection {
+  id: string;
+  name: string;
+  contentType: 'movie' | 'tvshow' | 'anime' | 'music';
+  directories: string[];
+  autoScan: boolean;
+  scanSchedule?: 'daily' | 'weekly' | 'monthly';
+  metadataProvider?: 'tmdb' | 'anilist' | 'mal' | 'imdb' | 'musicbrainz' | 'tvmaze';
+  createdAt: number;
+  updatedAt: number;
+}
+
+export interface UserAnnotation {
+  id: string;
+  mediaId: string;
+  timestamp: number; // Position in media where annotation is placed
+  text: string;
+  attachments?: {
+    type: 'image' | 'gif' | 'link';
+    url: string;
+  }[];
+  createdAt: number;
+  updatedAt: number;
+  visibility: 'private' | 'public' | 'friends' | 'custom';
+  customGroupId?: string;
+}
+
+export interface Wishlist {
+  id: string;
+  title: string;
+  mediaType: 'movie' | 'tvshow' | 'anime' | 'music';
+  metadata?: Partial<MediaMetadata>;
+  addedAt: number;
+  priority: 'low' | 'medium' | 'high';
 }

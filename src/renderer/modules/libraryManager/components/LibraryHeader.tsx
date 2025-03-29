@@ -6,7 +6,7 @@ interface FilterOptions {
   genre: string[];
   resolution: string[];
   watched: boolean | null;
-  folder: string[];
+  collection: string[];
 }
 
 interface LibraryHeaderProps {
@@ -14,8 +14,8 @@ interface LibraryHeaderProps {
   onFilterChange: (filters: FilterOptions) => void;
   onSortChange: (sortId: string) => void;
   onScanLibrary: () => void;
-  onAddFolder: () => void;
-  folderList?: string[]; // List of available folders
+  onAddCollection: () => void;
+  collectionList?: string[]; // List of available collections
 }
 
 function LibraryHeader({
@@ -23,8 +23,8 @@ function LibraryHeader({
   onFilterChange,
   onSortChange,
   onScanLibrary,
-  onAddFolder,
-  folderList = [],
+  onAddCollection,
+  collectionList = [],
 }: LibraryHeaderProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
@@ -32,18 +32,14 @@ function LibraryHeader({
     genre: [],
     resolution: [],
     watched: null,
-    folder: [],
+    collection: [],
   });
   const [sortOption, setSortOption] = useState('date_added_desc');
 
-  // Extract unique folder names from the folder list
-  const uniqueFolders = React.useMemo(() => {
-    const folderNames = folderList.map((path) => {
-      const parts = path.split('/');
-      return parts[parts.length - 1];
-    });
-    return [...new Set(folderNames)].sort();
-  }, [folderList]);
+  // Extract unique collection names
+  const uniqueCollections = React.useMemo(() => {
+    return [...new Set(collectionList)].sort();
+  }, [collectionList]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
@@ -75,7 +71,7 @@ function LibraryHeader({
       genre: [],
       resolution: [],
       watched: null,
-      folder: [],
+      collection: [],
     };
     setFilters(resetFilters);
     onFilterChange(resetFilters);
@@ -156,7 +152,7 @@ function LibraryHeader({
           Scan Library
         </button>
 
-        <button className="btn btn-primary" onClick={onAddFolder} type="button">
+        <button className="btn btn-primary" onClick={onAddCollection} type="button">
           <span className="add-icon">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -174,7 +170,7 @@ function LibraryHeader({
               <line x1="9" y1="14" x2="15" y2="14" />
             </svg>
           </span>
-          Add Folder
+          Create Collection
         </button>
       </div>
 
@@ -207,29 +203,29 @@ function LibraryHeader({
             </div>
           </div>
 
-          {uniqueFolders.length > 0 && (
+          {uniqueCollections.length > 0 && (
             <div className="filter-section">
-              <h3>Folders</h3>
+              <h3>Collections</h3>
               <div className="filter-options">
-                {uniqueFolders.map((folder) => (
+                {uniqueCollections.map((collection) => (
                   <label
-                    key={folder}
+                    key={collection}
                     className="filter-checkbox"
-                    htmlFor={`folder-${folder}`}
+                    htmlFor={`collection-${collection}`}
                   >
                     <input
                       type="checkbox"
-                      id={`folder-${folder}`}
-                      checked={filters.folder.includes(folder)}
+                      id={`collection-${collection}`}
+                      checked={filters.collection.includes(collection)}
                       onChange={(e) => {
-                        const newFolders = e.target.checked
-                          ? [...filters.folder, folder]
-                          : filters.folder.filter((f) => f !== folder);
-                        handleFilterChange('folder', newFolders);
+                        const newCollections = e.target.checked
+                          ? [...filters.collection, collection]
+                          : filters.collection.filter((c) => c !== collection);
+                        handleFilterChange('collection', newCollections);
                       }}
-                      aria-label={`Filter by ${folder} folder`}
+                      aria-label={`Filter by ${collection} collection`}
                     />
-                    <span>{folder}</span>
+                    <span>{collection}</span>
                   </label>
                 ))}
               </div>

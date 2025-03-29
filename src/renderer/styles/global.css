@@ -40,6 +40,9 @@ body {
   grid-column: 3 / -1;
 }
 
+.section:has(.app-nav.collapsed) > .content {
+  grid-column: 2 / -1;
+}
 /* ==================================
    Typography Styles
 ================================== */

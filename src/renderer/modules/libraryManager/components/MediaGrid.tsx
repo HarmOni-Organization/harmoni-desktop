@@ -11,6 +11,7 @@ interface MediaGridProps {
     resolution?: string[];
     watched?: boolean | null;
     folder?: string[];
+    collection?: string[];
   };
   sortOption?: string;
   onPlayMedia: (mediaId: string) => void;
@@ -91,6 +92,16 @@ function MediaGrid({
         if (!hasMatchingResolution) return false;
       }
 
+      // Collection filter
+      if (filters.collection && filters.collection.length > 0) {
+        if (!item.collectionName) return false;
+
+        const hasMatchingCollection = filters.collection.includes(
+          item.collectionName
+        );
+        if (!hasMatchingCollection) return false;
+      }
+
       // Watch status filter
       if (filters.watched !== null && filters.watched !== undefined) {
         if (item.watched !== filters.watched) return false;
@@ -145,8 +156,8 @@ function MediaGrid({
     });
   }, [filteredItems, sortOption]);
 
-  // Group media by folder when no search or filters are applied
-  const groupedByFolder = useMemo(() => {
+  // Group media by collection when no search or filters are applied
+  const groupedByCollection = useMemo(() => {
     if (
       searchQuery ||
       Object.keys(filters).some((key) => {
@@ -162,25 +173,23 @@ function MediaGrid({
 
     const groups: Record<string, { name: string; items: MediaItem[] }> = {};
 
-    // Group by parent folder name
+    // Group by collection name
     allMediaItems.forEach((item) => {
-      if (!item || !item.path) return;
+      if (!item) return;
 
-      const pathParts = item.path.split('/');
-      const folderName =
-        pathParts.length > 2 ? pathParts[pathParts.length - 2] : 'Other';
+      const collectionName = item.collectionName || 'Uncategorized';
 
-      if (!groups[folderName]) {
-        groups[folderName] = {
-          name: folderName,
+      if (!groups[collectionName]) {
+        groups[collectionName] = {
+          name: collectionName,
           items: [],
         };
       }
 
-      groups[folderName].items.push(item);
+      groups[collectionName].items.push(item);
     });
 
-    // Sort folders by name
+    // Sort collections by name
     return Object.values(groups).sort((a, b) => a.name.localeCompare(b.name));
   }, [allMediaItems, searchQuery, filters]);
 
@@ -324,10 +333,10 @@ function MediaGrid({
         </div>
       )}
 
-      {/* Folder-based organization */}
-      {groupedByFolder && groupedByFolder.length > 0 && (
+      {/* Collection-based organization */}
+      {groupedByCollection && groupedByCollection.length > 0 && (
         <>
-          {groupedByFolder.map((group) => (
+          {groupedByCollection.map((group) => (
             <div key={group.name} className="library-section">
               <h2 className="section-title">{group.name}</h2>
               <div className="media-grid">
@@ -387,8 +396,8 @@ function MediaGrid({
         </>
       )}
 
-      {/* All Media (when not showing folder-based or type-based organization) */}
-      {!groupedByFolder && !groupedByType && (
+      {/* All Media (when not showing collection-based or type-based organization) */}
+      {!groupedByCollection && !groupedByType && (
         <div className="library-section">
           {searchQuery ||
           Object.keys(filters).some((key) => {

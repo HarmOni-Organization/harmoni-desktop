@@ -4,10 +4,58 @@
   user-select: none;
   border-right: 1px solid var(--color--foreground--10);
   padding-top: 100px;
+  /* transition: all 0.3s ease; */
+  width: 250px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-nav.collapsed {
+  width: 80px;
+  grid-column: 1 / 2;
+}
+
+.app-nav .toggle-button {
+  position: absolute;
+  top: 70px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--color--background--100);
+  border: 1px solid var(--color--foreground--10);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  /* transition: all 0.3s ease; */
+  color: var(--color--foreground--33);
+  padding: 0;
+}
+
+.app-nav .toggle-button:hover {
+  background: var(--color--foreground--10);
+  color: var(--color--foreground--100);
+  transform: scale(1.05);
+}
+
+.app-nav .toggle-button:active {
+  transform: scale(0.95);
 }
 
 .app-nav .icon-container {
   width: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.2rem;
+}
+
+.app-nav .content {
+  flex: 1;
+  padding-bottom: 60px; /* Make space for toggle button */
 }
 
 .app-nav svg {
@@ -27,6 +75,15 @@
   margin: 10px 0;
   display: flex;
   gap: 10px;
+  align-items: center;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.app-nav.collapsed .item {
+  justify-content: center;
+  padding: 10px 0;
+  margin-left: -40px;
 }
 
 .app-nav .item > span {
@@ -43,6 +100,11 @@
   border: 2px solid var(--color--foreground--100);
   color: var(--color--foreground--100);
   border-radius: 24px;
+}
+
+.app-nav.app-nav.collapsed .item:hover:before,
+.app-nav.app-nav.collapsed .item.is--active:before {
+  left: calc((var(--grid--app-margin) - 40px) * -1);
 }
 
 .app-nav .item.is--active:before {
