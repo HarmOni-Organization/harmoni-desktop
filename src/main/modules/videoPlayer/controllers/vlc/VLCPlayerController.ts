@@ -1,4 +1,5 @@
 import { execSync } from 'child_process';
+import { app } from 'electron';
 import * as fs from 'fs';
 import path from 'path';
 import type { Logger } from 'shared/logger';
@@ -48,6 +49,7 @@ export class VLCPlayerController implements VideoPlayerController {
 
     const vlcExecutable = getValidVLCPath(VLC_EXECUTABLE_PATHS);
     if (!vlcExecutable) throw new Error('No valid VLC executable found.');
+
     // Determine the correct VLC Lua interface directory
     const getVlcLuaIntfPath = (): string => {
       const homeDir = process.env.HOME || process.env.USERPROFILE; // Cross-platform
@@ -73,19 +75,52 @@ export class VLCPlayerController implements VideoPlayerController {
 
     // Ensure the destination directory exists
     if (!fs.existsSync(VLC_LUA_INTF_DIR)) {
-      fs.mkdirSync(VLC_LUA_INTF_DIR, { recursive: true });
+      try {
+        fs.mkdirSync(VLC_LUA_INTF_DIR, { recursive: true });
+        this.logger.info(
+          `Created VLC lua interface directory: ${VLC_LUA_INTF_DIR}`,
+        );
+      } catch (err) {
+        this.logger.error(
+          `Failed to create VLC lua directory: ${(err as Error).message}`,
+        );
+        throw new Error(
+          `Failed to create VLC lua directory: ${(err as Error).message}`,
+        );
+      }
     }
 
     // Copy the Lua script if it's missing
     if (!fs.existsSync(VLC_LUA_DEST_PATH)) {
-      if (!fs.existsSync(VLC_LUA_SCRIPT_PATH)) {
-        throw new Error(`Lua script not found at: ${VLC_LUA_SCRIPT_PATH}`);
-      }
+      try {
+        if (!fs.existsSync(VLC_LUA_SCRIPT_PATH)) {
+          // In packaged app, try alternative locations
+          const resourcePath = app.isPackaged
+            ? path.join(process.resourcesPath, 'syncplay.lua')
+            : VLC_LUA_SCRIPT_PATH;
 
-      fs.copyFileSync(VLC_LUA_SCRIPT_PATH, VLC_LUA_DEST_PATH);
-      this.logger.info(
-        `Copied syncplay.lua to VLC interface directory: ${VLC_LUA_DEST_PATH}`,
-      );
+          if (fs.existsSync(resourcePath)) {
+            fs.copyFileSync(resourcePath, VLC_LUA_DEST_PATH);
+            this.logger.info(
+              `Copied syncplay.lua from resources to VLC interface directory: ${VLC_LUA_DEST_PATH}`,
+            );
+          } else {
+            throw new Error(
+              `Lua script not found at: ${VLC_LUA_SCRIPT_PATH} or ${resourcePath}`,
+            );
+          }
+        } else {
+          fs.copyFileSync(VLC_LUA_SCRIPT_PATH, VLC_LUA_DEST_PATH);
+          this.logger.info(
+            `Copied syncplay.lua to VLC interface directory: ${VLC_LUA_DEST_PATH}`,
+          );
+        }
+      } catch (err) {
+        this.logger.error(
+          `Failed to copy Lua script: ${(err as Error).message}`,
+        );
+        throw new Error(`Failed to copy Lua script: ${(err as Error).message}`);
+      }
     } else {
       this.logger.info(`Lua script already exists at: ${VLC_LUA_DEST_PATH}`);
     }
