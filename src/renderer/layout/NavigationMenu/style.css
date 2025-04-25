@@ -35,6 +35,10 @@
   padding: 0;
 }
 
+.app-nav .toggle-button.mobile-hidden {
+  display: none;
+}
+
 .app-nav .toggle-button:hover {
   background: var(--color--foreground--10);
   color: var(--color--foreground--100);

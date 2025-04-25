@@ -53,7 +53,10 @@ class AuthStore {
       await networkAwareAction(
         async () => {
           await this.validateSession();
-          AuthStore.connectToWebSocket(); // Automatically connect to WebSocket
+          if (this.authState.sessionActive) {
+            AuthStore.connectToWebSocket(); // Automatically connect to WebSocket
+            this.startTokenRefreshInterval(); // Start token refresh for valid sessions
+          }
         },
         () =>
           runInAction(() => {
@@ -83,6 +86,7 @@ class AuthStore {
       });
 
       AuthStore.connectToWebSocket(); // Connect to WebSocket after successful login
+      this.startTokenRefreshInterval(); // Start token refresh after login
     } catch (loginError) {
       runInAction(() => {
         this.authState.authError =
@@ -155,13 +159,25 @@ class AuthStore {
       try {
         const newToken = await authApi.refreshAccessToken();
         runInAction(() => {
-          this.authState.currentUser!.token = newToken;
-          window.electron.store.set(
-            'auth.currentUser',
-            this.authState.currentUser,
-          );
+          if (this.authState.currentUser) {
+            console.log('Refreshing token', newToken);
+
+            // Create a serializable copy of the user object
+            const updatedUser = {
+              ...this.authState.currentUser,
+              token: newToken,
+            };
+
+            // Update the store state
+            this.authState.currentUser.token = newToken;
+
+            // Store only the serializable user data
+            window.electron.store.set('auth.currentUser', updatedUser);
+          }
         });
-      } catch {
+      } catch (error) {
+        console.log('Refreshing token failed', error);
+
         runInAction(() => {
           this.logout();
         });
@@ -229,9 +245,10 @@ class AuthStore {
    * Logs out the user and clears the session data.
    */
   logout = () => {
+    this.stopTokenRefreshInterval();
     window.electron.store.delete('auth.currentUser');
     this.resetAuthState();
-    socketInstance.disconnect(); // Disconnect from WebSocket on logout
+    socketInstance.disconnect('default', true); // Disconnect from WebSocket on logout with proper parameters
   };
 
   /**
@@ -250,6 +267,39 @@ class AuthStore {
       };
     });
   }
+
+  /**
+   * Starts a token refresh interval to ensure the token stays valid
+   * during the user's session.
+   */
+  startTokenRefreshInterval() {
+    // Refresh token every 15 minutes (900000 ms)
+    const intervalId = setInterval(() => {
+      if (this.authState.loggedIn && this.authState.sessionActive) {
+        this.refreshSessionToken();
+      } else {
+        clearInterval(intervalId);
+      }
+    }, 900000); // Changed from 1000 ms (1 second) to 900000 ms (15 minutes)
+
+    // Store the interval ID for cleanup
+    window.electron.store.set('auth.tokenRefreshInterval', intervalId);
+  }
+
+  /**
+   * Stops the token refresh interval when user logs out.
+   */
+  stopTokenRefreshInterval = () => {
+    const intervalId = window.electron.store.get('auth.tokenRefreshInterval');
+    if (intervalId) {
+      clearInterval(intervalId);
+      window.electron.store.delete('auth.tokenRefreshInterval');
+      console.log(
+        'Token refresh interval stopped by',
+        this.authState.currentUser?.username || 'unknown user',
+      );
+    }
+  };
 
   get isAuthenticated() {
     return this.authState.loggedIn && this.authState.sessionActive;

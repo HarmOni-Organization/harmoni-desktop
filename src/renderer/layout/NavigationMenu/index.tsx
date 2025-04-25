@@ -1,11 +1,13 @@
 import './style.css';
 
+import { useEffect } from 'react';
 import clsx from 'classnames';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { observer } from 'mobx-react-lite';
 
 import { useNavigation } from '@contexts/NavigationContext';
 import preferencesStore from '@core/stores/PreferencesStore';
+import { useIsMobile } from '@hooks/use-mobile';
 import { navigationConfig } from '@navigation/index';
 
 import { navigationMenuClasses } from './navigationMenuClasses';
@@ -19,13 +21,25 @@ import { navigationMenuClasses } from './navigationMenuClasses';
  */
 function NavigationMenu(): JSX.Element {
   const { currentTab, setCurrentTab } = useNavigation();
+  const isMobile = useIsMobile(1021);
+
+  // Handle mobile/desktop transitions and remember sidebar state
+  useEffect(() => {
+    // If we're on mobile view, store the current collapse state for later
+    if (isMobile) {
+      preferencesStore.sidebarCollapsed = false;
+    }
+  }, [isMobile]);
 
   const handleItemSelect = (key: string) => {
     setCurrentTab(key);
   };
 
   const toggleCollapse = () => {
-    preferencesStore.toggleSidebar();
+    // Only toggle if not in mobile view
+    if (!isMobile) {
+      preferencesStore.toggleSidebar();
+    }
   };
 
   // Dynamically generate menu items from the navigationConfig
@@ -62,13 +76,17 @@ function NavigationMenu(): JSX.Element {
               {item.icon}
             </div>
             {!preferencesStore.sidebarCollapsed && (
-              <span className="no-wrap-text">{item.label}</span>
+              <span className={clsx({ 'no-wrap-text': !isMobile })}>
+                {item.label}
+              </span>
             )}
           </div>
         ))}
       </div>
       <button
-        className={navigationMenuClasses.toggleButton}
+        className={clsx(navigationMenuClasses.toggleButton, {
+          'mobile-hidden': isMobile,
+        })}
         onClick={toggleCollapse}
         aria-label={
           preferencesStore.sidebarCollapsed

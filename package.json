@@ -95,6 +95,7 @@
     "electron-store": "8",
     "electron-updater": "^6.1.4",
     "lodash": "^4.17.21",
+    "lucide-react": "^0.503.0",
     "mobx": "^6.13.5",
     "mobx-react-lite": "^4.0.7",
     "moment": "^2.30.1",
@@ -182,8 +183,8 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.app-configs.ElectronReact",
+    "productName": "HarmOni",
+    "appId": "org.app-configs.HarmOni",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
@@ -230,7 +231,8 @@
       "target": [
         "AppImage"
       ],
-      "category": "Development"
+      "category": "Development",
+      "icon": "assets/icon.png"
     },
     "directories": {
       "app": "release/app",

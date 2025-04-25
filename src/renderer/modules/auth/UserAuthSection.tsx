@@ -1,7 +1,7 @@
 import './style.scss';
 
-import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
+import { observer } from 'mobx-react-lite';
 
 import { LoginForm, RegisterForm } from './_components';
 import authStore from './core/store';
