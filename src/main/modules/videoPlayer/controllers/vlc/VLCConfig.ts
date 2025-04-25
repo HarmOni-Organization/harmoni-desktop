@@ -3,6 +3,7 @@
  */
 import fs from 'fs';
 import path from 'path';
+import { app } from 'electron';
 
 // VLC port range for Syncplay integration.
 export const VLC_PORT_RANGE = {
@@ -89,9 +90,6 @@ export const VLC_PLATFORM_ARGS =
     : ['--no-one-instance', '--no-one-instance-when-started-from-file'];
 
 // Path to the Syncplay Lua script. __dir + './lua/syncplay.lua'
-export const VLC_LUA_SCRIPT_PATH = path.join(
-  __dirname,
-  '..',
-  '..',
-  'syncplay.lua',
-);
+export const VLC_LUA_SCRIPT_PATH = app.isPackaged
+  ? path.join(app.getAppPath(), 'dist', 'syncplay.lua')
+  : path.join(__dirname, '..', '..', 'syncplay.lua');

@@ -18,6 +18,9 @@ export function identifyUserActions(
 
   if (!oldState || !newState) return [];
 
+  // Ensure a minimum interval to prevent false positives from very quick state checks
+  const normalizedInterval = Math.max(interval, 100);
+
   if (oldState.isPlaying !== newState.isPlaying) {
     actions.push({
       event: newState.isPlaying ? USER_ACTIONS.PLAY : USER_ACTIONS.PAUSE,
@@ -29,8 +32,14 @@ export function identifyUserActions(
   }
 
   const timeDifference = Math.abs(oldState.currentTime - newState.currentTime);
-  const expectedTimeAdvance = interval / 1000;
-  if (timeDifference > expectedTimeAdvance + 0.5) {
+  // Calculate expected time advance based on actual time passed and playback state
+  const expectedTimeAdvance =
+    (normalizedInterval / 1000) * (newState.isPlaying ? 1 : 0);
+
+  // Use a dynamic threshold that scales with the interval
+  const seekThreshold = Math.max(0.5, expectedTimeAdvance * 1.5);
+
+  if (timeDifference > expectedTimeAdvance + seekThreshold) {
     actions.push({
       event: USER_ACTIONS.SEEK,
       value: { currentTime: newState.currentTime },
