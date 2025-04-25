@@ -20,7 +20,7 @@
   /* Interactive States */
   --color--mixed--hover: color-mix(in lab, currentColor, #eeeeee 80%);
   --color--mixed--link: color-mix(in lab, currentColor, blue 60%);
-  --color--mixed--focus: color-mix(in lab, currentColor, orange 70%);
+  --color--mixed--focus: color-mix(in lab, currentColor);
   --color--mixed--disabled: color-mix(in lab, currentColor, gray 50%);
 
   /* Custom Highlights */

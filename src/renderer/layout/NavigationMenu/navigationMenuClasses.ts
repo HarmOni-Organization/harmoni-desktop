@@ -3,4 +3,6 @@ export const navigationMenuClasses = {
   isActive: 'is--active',
   item: 'item',
   content: 'content',
+  collapsed: 'collapsed',
+  toggleButton: 'toggle-button',
 };

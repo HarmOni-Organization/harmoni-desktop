@@ -21,9 +21,9 @@ export const loginUser = async (credentials: {
     '/auth/login',
     credentials,
   );
-  const { user, accessToken } = response.data;
+  const { user, accessToken, refreshToken } = response.data;
 
-  return { ...user, token: accessToken };
+  return { ...user, token: accessToken, refreshToken };
 };
 
 /**
@@ -40,9 +40,9 @@ export const registerUser = async (registrationData: {
     '/auth/register',
     registrationData,
   );
-  const { user, accessToken } = response.data;
+  const { user, accessToken, refreshToken } = response.data;
 
-  return { ...user, token: accessToken };
+  return { ...user, token: accessToken, refreshToken };
 };
 
 /**

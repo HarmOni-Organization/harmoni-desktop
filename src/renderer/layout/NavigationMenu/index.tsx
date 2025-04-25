@@ -1,8 +1,11 @@
 import './style.css';
 
 import clsx from 'classnames';
+import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { observer } from 'mobx-react-lite';
 
 import { useNavigation } from '@contexts/NavigationContext';
+import preferencesStore from '@core/stores/PreferencesStore';
 import { navigationConfig } from '@navigation/index';
 
 import { navigationMenuClasses } from './navigationMenuClasses';
@@ -21,6 +24,10 @@ function NavigationMenu(): JSX.Element {
     setCurrentTab(key);
   };
 
+  const toggleCollapse = () => {
+    preferencesStore.toggleSidebar();
+  };
+
   // Dynamically generate menu items from the navigationConfig
   const menuItems = Object.keys(navigationConfig)
     .filter((key) => key !== 'notFound')
@@ -32,7 +39,11 @@ function NavigationMenu(): JSX.Element {
     }));
 
   return (
-    <nav className={navigationMenuClasses.nav}>
+    <nav
+      className={clsx(navigationMenuClasses.nav, {
+        [navigationMenuClasses.collapsed]: preferencesStore.sidebarCollapsed,
+      })}
+    >
       <div className={navigationMenuClasses.content}>
         {menuItems.map((item) => (
           <div
@@ -47,13 +58,33 @@ function NavigationMenu(): JSX.Element {
             tabIndex={0}
             onKeyDown={(e) => e.key === 'Enter' && handleItemSelect(item.key)}
           >
-            <div className="icon-container">{item.icon}</div>
-            <span className="no-wrap-text">{item.label}</span>
+            <div className="icon-container" title={item.label}>
+              {item.icon}
+            </div>
+            {!preferencesStore.sidebarCollapsed && (
+              <span className="no-wrap-text">{item.label}</span>
+            )}
           </div>
         ))}
       </div>
+      <button
+        className={navigationMenuClasses.toggleButton}
+        onClick={toggleCollapse}
+        aria-label={
+          preferencesStore.sidebarCollapsed
+            ? 'Expand sidebar'
+            : 'Collapse sidebar'
+        }
+        type="button"
+      >
+        {preferencesStore.sidebarCollapsed ? (
+          <PanelLeftOpen size={16} />
+        ) : (
+          <PanelLeftClose size={16} />
+        )}
+      </button>
     </nav>
   );
 }
 
-export default NavigationMenu;
+export default observer(NavigationMenu);

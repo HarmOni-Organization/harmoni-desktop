@@ -1,6 +1,7 @@
 import './styles/global.css';
 import './styles/theme/media-queries.css';
 import 'react-tooltip/dist/react-tooltip.css';
+import 'tailwindcss/tailwind.css';
 
 import { createRoot } from 'react-dom/client';
 

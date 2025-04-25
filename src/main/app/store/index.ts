@@ -11,6 +11,7 @@ interface Auth {
     username: string;
     email?: string;
     token: string;
+    refreshToken: string;
   };
 }
 
@@ -52,6 +53,7 @@ const schema: { [K in keyof StoreSchema]: object } = {
           username: { type: 'string' },
           email: { type: 'string' },
           token: { type: 'string' },
+          refreshToken: { type: 'string' },
         },
         required: ['userId', 'username', 'token', 'email'],
       },

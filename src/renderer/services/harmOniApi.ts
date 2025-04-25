@@ -89,7 +89,9 @@ harmOniApiClient.interceptors.response.use(
 
       if (statusCode === 401) {
         try {
-          const token = window.electron.store.get('auth.currentUser.token');
+          const token = window.electron.store.get(
+            'auth.currentUser.refreshToken',
+          );
           if (token) {
             const refreshResponse = await axios.get(
               `${appConfig.baseURL}/auth/refresh-token`,

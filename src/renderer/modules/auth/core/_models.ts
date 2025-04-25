@@ -13,6 +13,7 @@ export interface BaseUser {
 
 export interface User extends BaseUser {
   token: string;
+  refreshToken: string;
 }
 
 export interface AuthState {
@@ -40,6 +41,7 @@ export interface ApiResponse<T> {
 export interface LoginResponse {
   user: Omit<User, 'token'>;
   accessToken: string;
+  refreshToken: string;
 }
 
 /**
@@ -48,6 +50,7 @@ export interface LoginResponse {
 export interface RegisterResponse {
   user: Omit<User, 'token'>;
   accessToken: string;
+  refreshToken: string;
 }
 
 /**
